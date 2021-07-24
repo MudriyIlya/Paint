@@ -47,7 +47,7 @@ class TestViewController: UIViewController {
         }
         swiped = false
         lastPoint = touch.location(in: view)
-        print("1 \(lastPoint) \(currentPoint)")
+//        print("1 \(lastPoint) \(currentPoint)")
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -59,10 +59,11 @@ class TestViewController: UIViewController {
         let currentPoint = touch.location(in: view)
         //drawLine(from: lastPoint, to: currentPoint)
         //drawCircle(from: lastPoint, to: currentPoint)
-        drawRectangle(from: lastPoint, to: currentPoint)
+        //drawRectangle(from: lastPoint, to: currentPoint)
+        drawTriangle(from: lastPoint, to: currentPoint)
         
         //lastPoint = currentPoint
-        print("2 \(lastPoint) \(currentPoint)")
+//        print("2 \(lastPoint) \(currentPoint)")
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -70,7 +71,8 @@ class TestViewController: UIViewController {
             // draw a single point
             //drawLine(from: lastPoint, to: lastPoint)
             //drawCircle(from: lastPoint, to: currentPoint)
-            drawRectangle(from: lastPoint, to: currentPoint)
+//            drawRectangle(from: lastPoint, to: currentPoint)
+            drawTriangle(from: lastPoint, to: currentPoint)
         }
         
         // Merge tempImageView into mainImageView
@@ -82,7 +84,7 @@ class TestViewController: UIViewController {
         
         tempImageView.image = nil
         
-        print("3 \(lastPoint) \(currentPoint)")
+//        print("3 \(lastPoint) \(currentPoint)")
     }
     
     func drawLine(from fromPoint: CGPoint, to toPoint: CGPoint) {
@@ -130,6 +132,7 @@ class TestViewController: UIViewController {
         UIGraphicsEndImageContext()
     }
     
+    // MARK: Rectangle
     func drawRectangle(from fromPoint: CGPoint, to toPoint: CGPoint) {
         UIGraphicsBeginImageContext(view.frame.size)
         guard let context = UIGraphicsGetCurrentContext() else {
@@ -153,17 +156,36 @@ class TestViewController: UIViewController {
         UIGraphicsEndImageContext()
     }
     
+    // MARK: Triangle
     func drawTriangle(from fromPoint: CGPoint, to toPoint: CGPoint) {
         UIGraphicsBeginImageContext(view.frame.size)
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return
-        }
+        guard let context = UIGraphicsGetCurrentContext() else { return }
         tempImageView.image?.draw(in: view.bounds)
-       
         context.clear(UIScreen.main.bounds)
         
-        //context.addPath
-        //(CGRect(x: fromPoint.x, y: fromPoint.y, width: toPoint.x - fromPoint.x, height: toPoint.y - fromPoint.y))
+        // Triangle
+//        let triangleBounds = CGRect(x: fromPoint.x, y: fromPoint.y, width: toPoint.x - fromPoint.x, height: toPoint.y - fromPoint.y)
+//        let triangleBounds = CGRect(x: fromPoint.x, y: fromPoint.y, width: toPoint.x, height: toPoint.y)
+        let triangleBounds = CGRect(x: fromPoint.x, y: fromPoint.y, width: toPoint.x - fromPoint.x, height: toPoint.y - fromPoint.y)
+        print(triangleBounds.width, triangleBounds.height)
+        
+        let path = UIBezierPath()
+    
+        path.move(to: CGPoint(x: triangleBounds.origin.x, y: triangleBounds.origin.y))
+        
+        path.addLine(to: CGPoint(x: triangleBounds.width/2, y: triangleBounds.maxY))
+//        path.addLine(to: CGPoint(x: triangleBounds.maxX, y: triangleBounds.origin.y))
+        
+        path.addLine(to: CGPoint(x: triangleBounds.origin.x, y: triangleBounds.origin.y))
+//        */
+//        context.beginPath()
+//        context.move(to: CGPoint(x: view.minX, y: view.maxY))
+//        context.addLine(to: CGPoint(x: view.maxX, y: view.maxY))
+//        context.addLine(to: CGPoint(x: (view.maxX / 2.0), y: view.minY))
+//        context.closePath()
+        
+        context.addPath(path.cgPath)
+        context.addRect(triangleBounds)
         
         context.setLineCap(.round)
         context.setBlendMode(.normal)
@@ -175,13 +197,6 @@ class TestViewController: UIViewController {
         tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
         tempImageView.alpha = opacity
         UIGraphicsEndImageContext()
-        
-        
-        let path = UIBezierPath()
-        path.move(to: CGPoint(x: 0, y: 200))
-        path.addLine(to: CGPoint(x: 100, y: 0))
-        path.addLine(to: CGPoint(x: 200, y: 200))
-        path.addLine(to: CGPoint(x: 0, y: 200))
     }
     
 }
