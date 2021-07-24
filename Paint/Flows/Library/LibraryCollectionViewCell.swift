@@ -26,7 +26,7 @@ final class LibraryCollectionViewCell: UICollectionViewCell {
 		return imageView
 	}()
 	
-	// MARK: Initialisation
+	// MARK: Initialization
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)

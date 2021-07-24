@@ -67,7 +67,7 @@ final class LibraryViewController: UIViewController {
 	
 	// TODO: - testMethod
 	@objc func someMethod() {
-		navigationController?.pushViewController(DrawViewController(), animated: true)
+		navigationController?.pushViewController(DrawingViewController(), animated: true)
 	}
     
     // MARK: - test fill
