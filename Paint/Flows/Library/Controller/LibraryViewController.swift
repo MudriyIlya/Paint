@@ -43,7 +43,7 @@ final class LibraryViewController: UIViewController {
 		setupConstraints()
         setupView()
     }
-	
+
 	private func setupConstraints() {
 		self.view.addSubview(collectionView)
 		NSLayoutConstraint.activate([
@@ -63,7 +63,6 @@ final class LibraryViewController: UIViewController {
 		title = "You have \(drawingCollection.count) drawings"
 		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(someMethod))
 	}
-	
 	
 	// TODO: - testMethod
     #warning("наверное надо унести в координатор")
