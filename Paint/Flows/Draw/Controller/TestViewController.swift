@@ -8,6 +8,8 @@
 import UIKit
 
 class TestViewController: UIViewController {
+    
+    // MARK: Variables
     private var color = UIColor.black
     private var brushWidth: CGFloat = 10.0
     private var opacity: CGFloat = 1.0
@@ -29,6 +31,7 @@ class TestViewController: UIViewController {
         return imageView
     }()
     
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -41,6 +44,7 @@ class TestViewController: UIViewController {
         self.view.addSubview(tempImageView)
     }
     
+    // MARK: Touch Handler
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else {
             return
@@ -87,6 +91,7 @@ class TestViewController: UIViewController {
 //        print("3 \(lastPoint) \(currentPoint)")
     }
     
+    // MARK: Line
     func drawLine(from fromPoint: CGPoint, to toPoint: CGPoint) {
         UIGraphicsBeginImageContext(view.frame.size)
         guard let context = UIGraphicsGetCurrentContext() else {
@@ -109,6 +114,7 @@ class TestViewController: UIViewController {
         UIGraphicsEndImageContext()
     }
     
+    // MARK: Circle
     func drawCircle(from fromPoint: CGPoint, to toPoint: CGPoint) {
         UIGraphicsBeginImageContext(view.frame.size)
         guard let context = UIGraphicsGetCurrentContext() else {
@@ -164,28 +170,13 @@ class TestViewController: UIViewController {
         context.clear(UIScreen.main.bounds)
         
         // Triangle
-//        let triangleBounds = CGRect(x: fromPoint.x, y: fromPoint.y, width: toPoint.x - fromPoint.x, height: toPoint.y - fromPoint.y)
-//        let triangleBounds = CGRect(x: fromPoint.x, y: fromPoint.y, width: toPoint.x, height: toPoint.y)
-        let triangleBounds = CGRect(x: fromPoint.x, y: fromPoint.y, width: toPoint.x - fromPoint.x, height: toPoint.y - fromPoint.y)
-        print(triangleBounds.width, triangleBounds.height)
-        
         let path = UIBezierPath()
-    
-        path.move(to: CGPoint(x: triangleBounds.origin.x, y: triangleBounds.origin.y))
-        
-        path.addLine(to: CGPoint(x: triangleBounds.width/2, y: triangleBounds.maxY))
-//        path.addLine(to: CGPoint(x: triangleBounds.maxX, y: triangleBounds.origin.y))
-        
-        path.addLine(to: CGPoint(x: triangleBounds.origin.x, y: triangleBounds.origin.y))
-//        */
-//        context.beginPath()
-//        context.move(to: CGPoint(x: view.minX, y: view.maxY))
-//        context.addLine(to: CGPoint(x: view.maxX, y: view.maxY))
-//        context.addLine(to: CGPoint(x: (view.maxX / 2.0), y: view.minY))
-//        context.closePath()
-        
+        path.move(to: CGPoint(x: fromPoint.x, y: fromPoint.y))
+        path.addLine(to: CGPoint(x: toPoint.x, y: fromPoint.y))
+        path.addLine(to: CGPoint(x: fromPoint.x + ((toPoint.x - fromPoint.x)/2), y: toPoint.y))
+        path.close()
+
         context.addPath(path.cgPath)
-        context.addRect(triangleBounds)
         
         context.setLineCap(.round)
         context.setBlendMode(.normal)
