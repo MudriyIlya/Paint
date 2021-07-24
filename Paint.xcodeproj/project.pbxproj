@@ -11,7 +11,7 @@
 		A2521DD326ABF82F009270A5 /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2521DD226ABF82F009270A5 /* LibraryViewController.swift */; };
 		A2521DD826ABF830009270A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2521DD726ABF830009270A5 /* Assets.xcassets */; };
 		A2521DDB26ABF830009270A5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2521DD926ABF830009270A5 /* LaunchScreen.storyboard */; };
-		A2521DE326AC021F009270A5 /* DrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2521DE226AC021F009270A5 /* DrawViewController.swift */; };
+		A2521DE326AC021F009270A5 /* DrawingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2521DE226AC021F009270A5 /* DrawingViewController.swift */; };
 		B4E4C9D126AC07F5009AD0A6 /* LibraryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E4C9D026AC07F5009AD0A6 /* LibraryCollectionViewCell.swift */; };
 		B4E4C9D526AC0F84009AD0A6 /* Drawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E4C9D426AC0F84009AD0A6 /* Drawing.swift */; };
 		E7F8B09826AC1E6B00AE0B49 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8B09726AC1E6B00AE0B49 /* Button.swift */; };
@@ -24,8 +24,8 @@
 		A2521DD726ABF830009270A5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A2521DDA26ABF830009270A5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A2521DDC26ABF831009270A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A2521DE226AC021F009270A5 /* DrawViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawViewController.swift; sourceTree = "<group>"; };
-		B4E4C9D026AC07F5009AD0A6 /* LibraryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LibraryCollectionViewCell.swift; path = Paint/Flows/Library/LibraryCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
+		A2521DE226AC021F009270A5 /* DrawingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewController.swift; sourceTree = "<group>"; };
+		B4E4C9D026AC07F5009AD0A6 /* LibraryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LibraryCollectionViewCell.swift; path = Paint/Flows/Library/View/LibraryCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		B4E4C9D426AC0F84009AD0A6 /* Drawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Drawing.swift; path = Paint/Flows/Library/Model/Drawing.swift; sourceTree = SOURCE_ROOT; };
 		E7F8B09726AC1E6B00AE0B49 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -102,7 +102,6 @@
 			isa = PBXGroup;
 			children = (
 				A2521DD226ABF82F009270A5 /* LibraryViewController.swift */,
-				B4E4C9D026AC07F5009AD0A6 /* LibraryCollectionViewCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -110,7 +109,7 @@
 		A2521DEB26AC0357009270A5 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				A2521DE226AC021F009270A5 /* DrawViewController.swift */,
+				A2521DE226AC021F009270A5 /* DrawingViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -133,6 +132,7 @@
 		B4E4C9D326AC0863009AD0A6 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B4E4C9D026AC07F5009AD0A6 /* LibraryCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -214,7 +214,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A2521DE326AC021F009270A5 /* DrawViewController.swift in Sources */,
+				A2521DE326AC021F009270A5 /* DrawingViewController.swift in Sources */,
 				E7F8B09826AC1E6B00AE0B49 /* Button.swift in Sources */,
 				B4E4C9D126AC07F5009AD0A6 /* LibraryCollectionViewCell.swift in Sources */,
 				A2521DD326ABF82F009270A5 /* LibraryViewController.swift in Sources */,
