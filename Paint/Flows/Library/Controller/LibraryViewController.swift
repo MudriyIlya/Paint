@@ -40,26 +40,41 @@ final class LibraryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+		setupConstraints()
         setupView()
-        fillData()
-        view.backgroundColor = .red
     }
-    
+	
+	private func setupConstraints() {
+		self.view.addSubview(collectionView)
+		NSLayoutConstraint.activate([
+			collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+			collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
+			collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+			collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+		])
+	}
+	
     private func setupView() {
-        self.view.addSubview(collectionView)
-        
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-        ])
+		fillData()
+		setupNavigationBar()
     }
+	
+	private func setupNavigationBar() {
+		title = "You have \(drawingCollection.count) drawings"
+		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(someMethod))
+	}
+	
+	
+	// TODO: - testMethod
+	@objc func someMethod() {
+		navigationController?.pushViewController(DrawViewController(), animated: true)
+	}
     
-    // test fill
+    // MARK: - test fill
     func fillData() {
-        drawingCollection.append(Drawing(name: "t", imageData: Data()))
+		let image = UIImage(named: "addDrawing")
+		guard let dataImage = image?.pngData() else { return }
+        drawingCollection.append(Drawing(name: "t", imageData: dataImage))
         drawingCollection.append(Drawing(name: "t1s", imageData: Data()))
         drawingCollection.append(Drawing(name: "t2sdfdf", imageData: Data()))
         drawingCollection.append(Drawing(name: "t3", imageData: Data()))
@@ -86,4 +101,10 @@ extension LibraryViewController: UICollectionViewDelegate, UICollectionViewDataS
         cell.backgroundColor = .blue
         return cell
     }
+	
+	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		if indexPath.row == 0 {
+			someMethod()
+		}
+	}
 }
