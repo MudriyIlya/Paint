@@ -66,6 +66,7 @@ final class LibraryViewController: UIViewController {
 	
 	
 	// TODO: - testMethod
+    #warning("наверное надо унести в координатор")
 	@objc func someMethod() {
 		navigationController?.pushViewController(DrawingViewController(), animated: true)
 	}

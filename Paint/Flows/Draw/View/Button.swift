@@ -33,6 +33,7 @@ final class Button: UIButton {
 	}
 	
 	// TODO: Пофиксить
+    #warning("посмотреть как нажимаются маленькие кнопки")
 //	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
 //		let view = self
 //		view.frame = CGRect(x: view.frame.origin.x - 5,

@@ -23,6 +23,8 @@ final class DrawingViewController: UIViewController {
 		return button
 	}()
 	
+    
+    // MARK: Color Picker
     private lazy var colorButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = colors.first
@@ -36,15 +38,38 @@ final class DrawingViewController: UIViewController {
         tableView.isHidden = true
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.showsVerticalScrollIndicator = false
-        tableView.bounces = false
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "colorCell")
         return tableView
     }()
     
+    // MARK: Tool Picker
+    private lazy var toolsCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 60, height: 60)
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "toolsCell")
+        collectionView.backgroundColor = .clear
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        return collectionView
+    }()
+    
     // TODO: colors
-    var colors: [UIColor] = [.red, .cyan, .yellow, .blue, .green, .black, .brown, .magenta, .systemPink, .orange ,.gray ,.purple]
+    #warning("сделай выбор цвета")
+    var colors: [UIColor] = [.red, .cyan, .yellow, .blue, .green, .black, .brown, .magenta, .systemPink, .orange, .gray, .purple]
     
     // MARK: Lifecycle
     
@@ -66,11 +91,12 @@ final class DrawingViewController: UIViewController {
     // MARK: Setup
     
 	private func setupView() {
-		view.backgroundColor = .green
+		view.backgroundColor = .lightGray
 		view.addSubview(saveButton)
 		view.addSubview(undoButton)
         view.addSubview(colorButton)
         view.addSubview(colorsTableView)
+        view.addSubview(toolsCollectionView)
 	}
 	
 	private func setupConstraints() {
@@ -101,6 +127,13 @@ final class DrawingViewController: UIViewController {
             colorsTableView.widthAnchor.constraint(equalToConstant: 30),
             colorsTableView.heightAnchor.constraint(equalToConstant: 7 * 30)
         ])
+        
+        NSLayoutConstraint.activate([
+            toolsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
+            toolsCollectionView.heightAnchor.constraint(equalToConstant: 60),
+            toolsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            toolsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ])
 	}
 	
 	private func setupActions() {
@@ -108,15 +141,13 @@ final class DrawingViewController: UIViewController {
 		saveButton.onButtonTapAction = { dfs in print("save")}
 	}
     
-    // TODO: Show hide colors
     @objc private func openColors() {
-        print("show / hide colors")
         colorsTableView.isHidden.toggle()
         colorButton.isHidden.toggle()
     }
 }
 
-// MARK: Extension DrawingViewController
+// MARK: Extension TableView Delegate
 extension DrawingViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -130,9 +161,15 @@ extension DrawingViewController: UITableViewDelegate, UITableViewDataSource {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "colorCell") as? UITableViewCell else { return UITableViewCell() }
         cell.backgroundColor = colors[indexPath.row]
+        
+        //TODO: white separator
+        #warning("сделай белый отступ между цветами")
+//        cell.layer.borderWidth = 1
+//        cell.layer.borderColor = UIColor.white.cgColor
+        
         return cell
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         colorButton.backgroundColor = colors[indexPath.row]
         openColors()
@@ -140,10 +177,19 @@ extension DrawingViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-extension UITableViewCell {
-    open override func layoutSubviews() {
-        super.layoutSubviews()
-        let padding = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
-//        self.frame = self.frame.inset(by: padding)
+// MARK: Extension CollectionView Delegate
+extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        // TODO: add tools
+        #warning("добавить массив инструментов")
+        return colors.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "toolsCell", for: indexPath) as? UICollectionViewCell else { return UICollectionViewCell() }
+        
+        cell.backgroundColor = colors[indexPath.row]
+        
+        return cell
     }
 }
