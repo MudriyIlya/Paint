@@ -15,6 +15,9 @@
 		B4E4C9D126AC07F5009AD0A6 /* LibraryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E4C9D026AC07F5009AD0A6 /* LibraryCollectionViewCell.swift */; };
 		B4E4C9D526AC0F84009AD0A6 /* Drawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E4C9D426AC0F84009AD0A6 /* Drawing.swift */; };
 		B4E4C9D726AC5386009AD0A6 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E4C9D626AC5386009AD0A6 /* TestViewController.swift */; };
+		E70CBB9F26AD8EBD0003350B /* ColorsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70CBB9E26AD8EBD0003350B /* ColorsTableViewCell.swift */; };
+		E72EC7F526AD9FC300A2766F /* FirstColorsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EC7F426AD9FC300A2766F /* FirstColorsTableViewCell.swift */; };
+		E72EC7F826ADA62300A2766F /* PrototypeColorsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EC7F726ADA62300A2766F /* PrototypeColorsTableViewCell.swift */; };
 		E7F8B09826AC1E6B00AE0B49 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8B09726AC1E6B00AE0B49 /* Button.swift */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +32,9 @@
 		B4E4C9D026AC07F5009AD0A6 /* LibraryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LibraryCollectionViewCell.swift; path = Paint/Flows/Library/View/LibraryCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		B4E4C9D426AC0F84009AD0A6 /* Drawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Drawing.swift; path = Paint/Flows/Library/Model/Drawing.swift; sourceTree = SOURCE_ROOT; };
 		B4E4C9D626AC5386009AD0A6 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TestViewController.swift; path = Paint/Flows/Draw/Controller/TestViewController.swift; sourceTree = SOURCE_ROOT; };
+		E70CBB9E26AD8EBD0003350B /* ColorsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsTableViewCell.swift; sourceTree = "<group>"; };
+		E72EC7F426AD9FC300A2766F /* FirstColorsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstColorsTableViewCell.swift; sourceTree = "<group>"; };
+		E72EC7F726ADA62300A2766F /* PrototypeColorsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypeColorsTableViewCell.swift; sourceTree = "<group>"; };
 		E7F8B09726AC1E6B00AE0B49 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -144,6 +150,9 @@
 			isa = PBXGroup;
 			children = (
 				E7F8B09726AC1E6B00AE0B49 /* Button.swift */,
+				E70CBB9E26AD8EBD0003350B /* ColorsTableViewCell.swift */,
+				E72EC7F426AD9FC300A2766F /* FirstColorsTableViewCell.swift */,
+				E72EC7F726ADA62300A2766F /* PrototypeColorsTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -218,12 +227,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				B4E4C9D726AC5386009AD0A6 /* TestViewController.swift in Sources */,
+				E70CBB9F26AD8EBD0003350B /* ColorsTableViewCell.swift in Sources */,
 				A2521DE326AC021F009270A5 /* DrawingViewController.swift in Sources */,
+				E72EC7F526AD9FC300A2766F /* FirstColorsTableViewCell.swift in Sources */,
 				E7F8B09826AC1E6B00AE0B49 /* Button.swift in Sources */,
 				B4E4C9D126AC07F5009AD0A6 /* LibraryCollectionViewCell.swift in Sources */,
 				A2521DD326ABF82F009270A5 /* LibraryViewController.swift in Sources */,
 				A2521DCF26ABF82F009270A5 /* AppDelegate.swift in Sources */,
 				B4E4C9D526AC0F84009AD0A6 /* Drawing.swift in Sources */,
+				E72EC7F826ADA62300A2766F /* PrototypeColorsTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
