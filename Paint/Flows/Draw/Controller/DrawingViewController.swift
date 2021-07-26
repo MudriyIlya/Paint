@@ -22,7 +22,12 @@ final class DrawingViewController: UIViewController {
 		//button.backgroundColor = .red
 		return button
 	}()
-	
+    
+    private lazy var exitButton: Button = {
+        let button = Button(imageName: "exit")
+        //button.backgroundColor = .red
+        return button
+    }()
 	
 	// MARK: Color Picker
 	private lazy var colorButton: UIButton = {
@@ -84,6 +89,7 @@ final class DrawingViewController: UIViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		navigationController?.navigationBar.isHidden = true
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
 	}
 	
 	override var prefersStatusBarHidden: Bool {
@@ -96,6 +102,7 @@ final class DrawingViewController: UIViewController {
 		view.backgroundColor = .lightGray
 		view.addSubview(saveButton)
 		view.addSubview(undoButton)
+        view.addSubview(exitButton)
 		view.addSubview(colorButton)
 		view.addSubview(colorsTableView)
 		view.addSubview(toolsCollectionView)
@@ -116,6 +123,13 @@ final class DrawingViewController: UIViewController {
 			undoButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor)
 		])
 		
+        NSLayoutConstraint.activate([
+            exitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            exitButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            exitButton.widthAnchor.constraint(equalToConstant: 20),
+            exitButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor)
+        ])
+        
 		NSLayoutConstraint.activate([
 			colorButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
 			colorButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
@@ -141,6 +155,9 @@ final class DrawingViewController: UIViewController {
 	private func setupActions() {
 		undoButton.onButtonTapAction = { dfs in print("undo")}
 		saveButton.onButtonTapAction = { dfs in print("save")}
+        exitButton.onButtonTapAction = { _ in
+            self.navigationController?.popViewController(animated: true)
+        }
 	}
 	
 	@objc private func openColors() {
