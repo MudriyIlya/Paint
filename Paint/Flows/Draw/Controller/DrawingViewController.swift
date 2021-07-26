@@ -11,6 +11,8 @@ final class DrawingViewController: UIViewController {
 	
 	// MARK: Variables
 	
+	private var centerCell: ToolsCollectionViewCell?
+	
 	private lazy var undoButton: Button = {
 		let button = Button(imageName: "refresh")
 		//button.backgroundColor = .blue
@@ -55,15 +57,10 @@ final class DrawingViewController: UIViewController {
 	
 	// MARK: Tool Picker
 	private lazy var toolsCollectionView: UICollectionView = {
-		let layout = UICollectionViewFlowLayout()
-		layout.itemSize = CGSize(width: 60, height: 60)
-		layout.scrollDirection = .horizontal
-		layout.minimumLineSpacing = 10
-		layout.minimumInteritemSpacing = 10
-		
+		let layout = ToolsCollectionViewFlowLayout()		
 		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 		collectionView.translatesAutoresizingMaskIntoConstraints = false
-		collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "toolsCell")
+		collectionView.register(ToolsCollectionViewCell.self, forCellWithReuseIdentifier: "toolsCell")
 		collectionView.backgroundColor = .clear
 		collectionView.showsVerticalScrollIndicator = false
 		collectionView.showsHorizontalScrollIndicator = false
@@ -76,7 +73,7 @@ final class DrawingViewController: UIViewController {
 	
 	// TODO: colors
 	#warning("сделай выбор цвета")
-	var colors: [UIColor] = [.red, .cyan, .yellow, .blue, .green, .black, .brown, .magenta, .systemPink, .orange, .gray, .purple]
+	var colors: [UIColor] = [.red, .cyan, .yellow, .blue, .green, .black, .brown, .magenta, .systemPink, .orange, .gray, .purple, .brown]
 	
 	// MARK: Lifecycle
 	
@@ -90,6 +87,10 @@ final class DrawingViewController: UIViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		navigationController?.navigationBar.isHidden = true
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		changeCollectionViewEdgeInsets()
 	}
 	
 	override var prefersStatusBarHidden: Bool {
@@ -146,9 +147,9 @@ final class DrawingViewController: UIViewController {
 		
 		NSLayoutConstraint.activate([
 			toolsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
-			toolsCollectionView.heightAnchor.constraint(equalToConstant: 60),
-			toolsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-			toolsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+			toolsCollectionView.heightAnchor.constraint(equalToConstant: 80),
+			toolsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+			toolsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10)
 		])
 	}
 	
@@ -158,6 +159,13 @@ final class DrawingViewController: UIViewController {
         exitButton.onButtonTapAction = { _ in
             self.navigationController?.popViewController(animated: true)
         }
+	}
+	
+	private func changeCollectionViewEdgeInsets() {
+		let layoutMargins: CGFloat = self.toolsCollectionView.layoutMargins.left +
+			self.toolsCollectionView.layoutMargins.right
+		let sideInset = (self.view.frame.width / 2) - layoutMargins
+		self.toolsCollectionView.contentInset = UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
 	}
 	
 	@objc private func openColors() {
@@ -201,10 +209,31 @@ extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataS
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "toolsCell", for: indexPath) as? UICollectionViewCell else { return UICollectionViewCell() }
-		
-		cell.backgroundColor = colors[indexPath.row]
-		
+		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "toolsCell", for: indexPath) as? ToolsCollectionViewCell else { return UICollectionViewCell() }
+		cell.setColor(colors[indexPath.row])
 		return cell
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		collectionView.deselectItem(at: indexPath, animated: false)
+		collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+	}
+	
+	func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		let centerPoint = CGPoint(x: self.toolsCollectionView.frame.size.width / 2 + scrollView.contentOffset.x,
+								  y: self.toolsCollectionView.frame.size.height / 2 + scrollView.contentOffset.y)
+		
+		if let indexPath = self.toolsCollectionView.indexPathForItem(at: centerPoint) {
+			centerCell = (self.toolsCollectionView.cellForItem(at: indexPath) as? ToolsCollectionViewCell )
+			centerCell?.transformToLarge()
+		}
+		
+		if let cell = self.centerCell {
+			let offsetX = centerPoint.x - cell.center.x
+			if offsetX < -15 || offsetX > 15 {
+				cell.transformToIdentity()
+				self.centerCell = nil
+			}
+		}
 	}
 }
