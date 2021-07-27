@@ -71,6 +71,16 @@ final class DrawingViewController: UIViewController {
 		return collectionView
 	}()
 	
+	private lazy var leftGradientView: GradientView = {
+		let view = GradientView(direction: .toRight)
+		return view
+	}()
+	
+	private lazy var rightGradientView: GradientView = {
+		let view = GradientView(direction: .toLeft)
+		return view
+	}()
+	
 	// TODO: colors
 	#warning("сделай выбор цвета")
 	var colors: [UIColor] = [.red, .cyan, .yellow, .blue, .green, .black, .brown, .magenta, .systemPink, .orange, .gray, .purple, .brown]
@@ -91,6 +101,8 @@ final class DrawingViewController: UIViewController {
 	
 	override func viewDidAppear(_ animated: Bool) {
 		changeCollectionViewEdgeInsets()
+		leftGradientView.setupGradientLayer()
+		rightGradientView.setupGradientLayer()
 	}
 	
 	override var prefersStatusBarHidden: Bool {
@@ -100,13 +112,15 @@ final class DrawingViewController: UIViewController {
 	// MARK: Setup
 	
 	private func setupView() {
-		view.backgroundColor = .lightGray
+		view.backgroundColor = .white
 		view.addSubview(saveButton)
 		view.addSubview(undoButton)
         view.addSubview(exitButton)
 		view.addSubview(colorButton)
 		view.addSubview(colorsTableView)
 		view.addSubview(toolsCollectionView)
+		view.addSubview(leftGradientView)
+		view.addSubview(rightGradientView)
 	}
 	
 	private func setupConstraints() {
@@ -150,6 +164,20 @@ final class DrawingViewController: UIViewController {
 			toolsCollectionView.heightAnchor.constraint(equalToConstant: 80),
 			toolsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
 			toolsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10)
+		])
+		
+		NSLayoutConstraint.activate([
+			leftGradientView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
+			leftGradientView.heightAnchor.constraint(equalToConstant: 80),
+			leftGradientView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+			leftGradientView.widthAnchor.constraint(equalToConstant: 100)
+		])
+		
+		NSLayoutConstraint.activate([
+			rightGradientView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
+			rightGradientView.heightAnchor.constraint(equalToConstant: 80),
+			rightGradientView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 10),
+			rightGradientView.widthAnchor.constraint(equalToConstant: 100)
 		])
 	}
 	
