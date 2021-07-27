@@ -35,7 +35,7 @@
 		A2521DE226AC021F009270A5 /* DrawingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewController.swift; sourceTree = "<group>"; };
 		B4E4C9D026AC07F5009AD0A6 /* LibraryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LibraryCollectionViewCell.swift; path = Paint/Flows/Library/View/LibraryCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		B4E4C9D426AC0F84009AD0A6 /* Drawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Drawing.swift; path = Paint/Flows/Library/Model/Drawing.swift; sourceTree = SOURCE_ROOT; };
-		B4E4C9D626AC5386009AD0A6 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TestViewController.swift; path = Paint/Flows/Draw/Controller/TestViewController.swift; sourceTree = SOURCE_ROOT; };
+		B4E4C9D626AC5386009AD0A6 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TestViewController.swift; path = Paint/TestViewController.swift; sourceTree = SOURCE_ROOT; };
 		E70CBB9E26AD8EBD0003350B /* ColorsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsTableViewCell.swift; sourceTree = "<group>"; };
 		E72EC7F426AD9FC300A2766F /* FirstColorsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstColorsTableViewCell.swift; sourceTree = "<group>"; };
 		E72EC7F726ADA62300A2766F /* PrototypeColorsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypeColorsTableViewCell.swift; sourceTree = "<group>"; };
@@ -77,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				A2521DCE26ABF82F009270A5 /* AppDelegate.swift */,
+				B4E4C9D626AC5386009AD0A6 /* TestViewController.swift */,
 				A2521DE426AC026D009270A5 /* Flows */,
 				A2521DD726ABF830009270A5 /* Assets.xcassets */,
 				A2521DD926ABF830009270A5 /* LaunchScreen.storyboard */,
@@ -125,7 +126,6 @@
 		A2521DEB26AC0357009270A5 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				B4E4C9D626AC5386009AD0A6 /* TestViewController.swift */,
 				A2521DE226AC021F009270A5 /* DrawingViewController.swift */,
 			);
 			path = Controller;

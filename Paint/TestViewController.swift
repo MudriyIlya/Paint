@@ -17,7 +17,10 @@ class TestViewController: UIViewController {
     private var currentPoint = CGPoint.zero
     private var swiped = false
     
+    //
+    #warning("wtf ???")
     private var cgrectArray = [CGRect]()
+    
     
     private lazy var mainImageView: UIImageView = {
         let imageView = UIImageView()
@@ -31,6 +34,8 @@ class TestViewController: UIViewController {
         return imageView
     }()
     
+    
+    
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +48,8 @@ class TestViewController: UIViewController {
         self.view.addSubview(mainImageView)
         self.view.addSubview(tempImageView)
     }
+    
+    
     
     // MARK: Touch Handler
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -70,6 +77,8 @@ class TestViewController: UIViewController {
 //        print("2 \(lastPoint) \(currentPoint)")
     }
     
+    
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !swiped {
             // draw a single point
@@ -90,6 +99,8 @@ class TestViewController: UIViewController {
         
 //        print("3 \(lastPoint) \(currentPoint)")
     }
+    
+    
     
     // MARK: Line
     func drawLine(from fromPoint: CGPoint, to toPoint: CGPoint) {
@@ -113,6 +124,8 @@ class TestViewController: UIViewController {
         tempImageView.alpha = opacity
         UIGraphicsEndImageContext()
     }
+    
+    
     
     // MARK: Circle
     func drawCircle(from fromPoint: CGPoint, to toPoint: CGPoint) {
@@ -138,6 +151,8 @@ class TestViewController: UIViewController {
         UIGraphicsEndImageContext()
     }
     
+    
+    
     // MARK: Rectangle
     func drawRectangle(from fromPoint: CGPoint, to toPoint: CGPoint) {
         UIGraphicsBeginImageContext(view.frame.size)
@@ -161,6 +176,9 @@ class TestViewController: UIViewController {
         tempImageView.alpha = opacity
         UIGraphicsEndImageContext()
     }
+    
+    
+    
     
     // MARK: Triangle
     func drawTriangle(from fromPoint: CGPoint, to toPoint: CGPoint) {
