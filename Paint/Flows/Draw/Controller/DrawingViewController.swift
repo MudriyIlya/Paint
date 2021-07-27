@@ -7,7 +7,8 @@
 
 import UIKit
 
-final class DrawingViewController: UIViewController {
+// MARK: - Drawing View Controller
+final class DrawingViewController: DrawingCanvasViewController {
 	
 	// MARK: Variables
 	
@@ -81,11 +82,11 @@ final class DrawingViewController: UIViewController {
 		return view
 	}()
 	
-	// TODO: colors
+    // TODO: сделать colors
 	#warning("сделай выбор цвета")
-	var colors: [UIColor] = [.red, .cyan, .yellow, .blue, .green, .black, .brown, .magenta, .systemPink, .orange, .gray, .purple, .brown]
-	
-	// MARK: Lifecycle
+    var colors: [UIColor] = [.black, .red, .cyan, .yellow, .blue, .green, .black, .brown, .magenta, .systemPink, .orange, .gray, .purple, .brown]
+    
+	// MARK: - Lifecycle
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -109,7 +110,7 @@ final class DrawingViewController: UIViewController {
 		return true
 	}
 	
-	// MARK: Setup
+	// MARK: - Setup
 	
 	private func setupView() {
 		view.backgroundColor = .white
@@ -223,6 +224,8 @@ extension DrawingViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		colorButton.backgroundColor = colors[indexPath.row]
+        // TODO: изменять цвет
+        lineColor = colors[indexPath.row]
 		openColors()
 		tableView.deselectRow(at: indexPath, animated: true)
 	}
@@ -231,14 +234,26 @@ extension DrawingViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: Extension CollectionView Delegate
 extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		// TODO: add tools
-		#warning("добавить массив инструментов")
-		return colors.count
+		return tools.count
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "toolsCell", for: indexPath) as? ToolsCollectionViewCell else { return UICollectionViewCell() }
-		cell.setColor(colors[indexPath.row])
+        var imageTool = UIImage()
+        #warning("переписать force unwrap'ы")
+        switch tools[indexPath.row] {
+        case .Pencil:
+            imageTool = UIImage(named: "pencil")!
+        case .Line:
+            imageTool = UIImage(named: "line")!
+        case .Rectangle:
+            imageTool = UIImage(named: "rectangle")!
+        case .Ellipse:
+            imageTool = UIImage(named: "ellipse")!
+        case .Triangle:
+            imageTool = UIImage(named: "triangle")!
+        }
+        cell.setImage(image: imageTool)
 		return cell
 	}
 	
@@ -254,6 +269,7 @@ extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataS
 		if let indexPath = self.toolsCollectionView.indexPathForItem(at: centerPoint) {
 			centerCell = (self.toolsCollectionView.cellForItem(at: indexPath) as? ToolsCollectionViewCell )
 			centerCell?.transformToLarge()
+            pickedTool = tools[indexPath.row]
 		}
 		
 		if let cell = self.centerCell {

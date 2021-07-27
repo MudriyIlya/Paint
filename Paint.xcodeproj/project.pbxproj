@@ -12,9 +12,10 @@
 		A2521DD826ABF830009270A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2521DD726ABF830009270A5 /* Assets.xcassets */; };
 		A2521DDB26ABF830009270A5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2521DD926ABF830009270A5 /* LaunchScreen.storyboard */; };
 		A2521DE326AC021F009270A5 /* DrawingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2521DE226AC021F009270A5 /* DrawingViewController.swift */; };
+		A2CAB7A226B0AC8000482C5D /* Tool.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2CAB7A126B0AC8000482C5D /* Tool.swift */; };
 		B4E4C9D126AC07F5009AD0A6 /* LibraryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E4C9D026AC07F5009AD0A6 /* LibraryCollectionViewCell.swift */; };
 		B4E4C9D526AC0F84009AD0A6 /* Drawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E4C9D426AC0F84009AD0A6 /* Drawing.swift */; };
-		B4E4C9D726AC5386009AD0A6 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E4C9D626AC5386009AD0A6 /* TestViewController.swift */; };
+		B4E4C9D726AC5386009AD0A6 /* DrawingCanvasViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E4C9D626AC5386009AD0A6 /* DrawingCanvasViewController.swift */; };
 		E70CBB9F26AD8EBD0003350B /* ColorsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70CBB9E26AD8EBD0003350B /* ColorsTableViewCell.swift */; };
 		E72EC7F526AD9FC300A2766F /* FirstColorsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EC7F426AD9FC300A2766F /* FirstColorsTableViewCell.swift */; };
 		E72EC7F826ADA62300A2766F /* PrototypeColorsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EC7F726ADA62300A2766F /* PrototypeColorsTableViewCell.swift */; };
@@ -33,9 +34,10 @@
 		A2521DDA26ABF830009270A5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A2521DDC26ABF831009270A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2521DE226AC021F009270A5 /* DrawingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewController.swift; sourceTree = "<group>"; };
+		A2CAB7A126B0AC8000482C5D /* Tool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tool.swift; sourceTree = "<group>"; };
 		B4E4C9D026AC07F5009AD0A6 /* LibraryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LibraryCollectionViewCell.swift; path = Paint/Flows/Library/View/LibraryCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		B4E4C9D426AC0F84009AD0A6 /* Drawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Drawing.swift; path = Paint/Flows/Library/Model/Drawing.swift; sourceTree = SOURCE_ROOT; };
-		B4E4C9D626AC5386009AD0A6 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TestViewController.swift; path = Paint/Flows/Draw/Controller/TestViewController.swift; sourceTree = SOURCE_ROOT; };
+		B4E4C9D626AC5386009AD0A6 /* DrawingCanvasViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DrawingCanvasViewController.swift; path = Paint/Flows/Draw/Controller/DrawingCanvasViewController.swift; sourceTree = SOURCE_ROOT; };
 		E70CBB9E26AD8EBD0003350B /* ColorsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsTableViewCell.swift; sourceTree = "<group>"; };
 		E72EC7F426AD9FC300A2766F /* FirstColorsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstColorsTableViewCell.swift; sourceTree = "<group>"; };
 		E72EC7F726ADA62300A2766F /* PrototypeColorsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypeColorsTableViewCell.swift; sourceTree = "<group>"; };
@@ -125,8 +127,8 @@
 		A2521DEB26AC0357009270A5 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				B4E4C9D626AC5386009AD0A6 /* TestViewController.swift */,
 				A2521DE226AC021F009270A5 /* DrawingViewController.swift */,
+				B4E4C9D626AC5386009AD0A6 /* DrawingCanvasViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -135,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				E7ADD05026B0620500B3F39C /* Direction.swift */,
+				A2CAB7A126B0AC8000482C5D /* Tool.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -254,9 +257,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B4E4C9D726AC5386009AD0A6 /* TestViewController.swift in Sources */,
+				B4E4C9D726AC5386009AD0A6 /* DrawingCanvasViewController.swift in Sources */,
 				E7ADD05126B0620500B3F39C /* Direction.swift in Sources */,
 				E70CBB9F26AD8EBD0003350B /* ColorsTableViewCell.swift in Sources */,
+				A2CAB7A226B0AC8000482C5D /* Tool.swift in Sources */,
 				A2521DE326AC021F009270A5 /* DrawingViewController.swift in Sources */,
 				E7F267BD26AED9680068A648 /* ToolsCollectionViewCell.swift in Sources */,
 				E7F267C426AF0A8A0068A648 /* ToolsCollectionViewFlowLayout.swift in Sources */,
