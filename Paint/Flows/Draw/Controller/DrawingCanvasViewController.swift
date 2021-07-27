@@ -1,26 +1,23 @@
 //
-//  TestViewController.swift
+//  DrawingCanvasViewController.swift
 //  Paint
 //
 //  Created by Сергей Флоря on 24.07.2021.
 //
 
 import UIKit
-
-class TestViewController: UIViewController {
+// MARK: - View Controller
+class DrawingCanvasViewController: UIViewController {
     
     // MARK: Variables
-    private var color = UIColor.black
-    private var brushWidth: CGFloat = 10.0
+    var lineColor = UIColor.black
+    var lineWidth: CGFloat = 10.0
+    var pickedTool: Tool = .Pencil
+    private(set) var tools: [Tool] = [.Pencil, .Line, .Rectangle, .Ellipse, .Triangle]
     private var opacity: CGFloat = 1.0
     private var lastPoint = CGPoint.zero
     private var currentPoint = CGPoint.zero
     private var swiped = false
-    
-    //
-    #warning("wtf ???")
-    private var cgrectArray = [CGRect]()
-    
     
     private lazy var mainImageView: UIImageView = {
         let imageView = UIImageView()
@@ -34,31 +31,25 @@ class TestViewController: UIViewController {
         return imageView
     }()
     
-    
-    
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
     }
     
     private func setupView() {
-        self.view.backgroundColor = .cyan
-        
+        self.view.backgroundColor = .white
         self.view.addSubview(mainImageView)
         self.view.addSubview(tempImageView)
     }
     
-    
-    
-    // MARK: Touch Handler
+    // MARK: - Touch
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else {
             return
         }
         swiped = false
         lastPoint = touch.location(in: view)
-//        print("1 \(lastPoint) \(currentPoint)")
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -68,24 +59,16 @@ class TestViewController: UIViewController {
         
         swiped = true
         let currentPoint = touch.location(in: view)
-        //drawLine(from: lastPoint, to: currentPoint)
-        //drawCircle(from: lastPoint, to: currentPoint)
-        //drawRectangle(from: lastPoint, to: currentPoint)
-        drawTriangle(from: lastPoint, to: currentPoint)
         
-        //lastPoint = currentPoint
-//        print("2 \(lastPoint) \(currentPoint)")
+        draw(from: lastPoint, to: currentPoint)
+        if pickedTool == .Pencil {
+            lastPoint = currentPoint
+        }
     }
-    
-    
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !swiped {
-            // draw a single point
-            //drawLine(from: lastPoint, to: lastPoint)
-            //drawCircle(from: lastPoint, to: currentPoint)
-//            drawRectangle(from: lastPoint, to: currentPoint)
-            drawTriangle(from: lastPoint, to: currentPoint)
+            draw(from: lastPoint, to: currentPoint)
         }
         
         // Merge tempImageView into mainImageView
@@ -96,14 +79,26 @@ class TestViewController: UIViewController {
         UIGraphicsEndImageContext()
         
         tempImageView.image = nil
-        
-//        print("3 \(lastPoint) \(currentPoint)")
     }
     
+    // MARK: - Drawing
+    private func draw(from startPoint: CGPoint, to endPoint: CGPoint) {
+        switch pickedTool {
+        case .Pencil:
+            drawLineByPencil(from: startPoint, to: endPoint)
+        case .Line:
+            drawLine(from: startPoint, to: endPoint)
+        case .Rectangle:
+            drawRectangle(from: startPoint, to: endPoint)
+        case .Ellipse:
+            drawEllipse(from: startPoint, to: endPoint)
+        case .Triangle:
+            drawTriangle(from: startPoint, to: endPoint)
+        }
+    }
     
-    
-    // MARK: Line
-    func drawLine(from fromPoint: CGPoint, to toPoint: CGPoint) {
+    // MARK: Pencil
+    func drawLineByPencil(from fromPoint: CGPoint, to toPoint: CGPoint) {
         UIGraphicsBeginImageContext(view.frame.size)
         guard let context = UIGraphicsGetCurrentContext() else {
             return
@@ -115,8 +110,8 @@ class TestViewController: UIViewController {
         
         context.setLineCap(.round)
         context.setBlendMode(.normal)
-        context.setLineWidth(brushWidth)
-        context.setStrokeColor(color.cgColor)
+        context.setLineWidth(lineWidth)
+        context.setStrokeColor(lineColor.cgColor)
         
         context.strokePath()
         
@@ -125,24 +120,22 @@ class TestViewController: UIViewController {
         UIGraphicsEndImageContext()
     }
     
-    
-    
-    // MARK: Circle
-    func drawCircle(from fromPoint: CGPoint, to toPoint: CGPoint) {
+    // MARK: Line
+    func drawLine(from fromPoint: CGPoint, to toPoint: CGPoint) {
         UIGraphicsBeginImageContext(view.frame.size)
         guard let context = UIGraphicsGetCurrentContext() else {
             return
         }
         tempImageView.image?.draw(in: view.bounds)
-       
         context.clear(UIScreen.main.bounds)
         
-        context.addEllipse(in: CGRect(x: fromPoint.x, y: fromPoint.y, width: toPoint.x - fromPoint.x, height: toPoint.y - fromPoint.y))
+        context.move(to: fromPoint)
+        context.addLine(to: toPoint)
         
         context.setLineCap(.round)
         context.setBlendMode(.normal)
-        context.setLineWidth(brushWidth)
-        context.setStrokeColor(color.cgColor)
+        context.setLineWidth(lineWidth)
+        context.setStrokeColor(lineColor.cgColor)
         
         context.strokePath()
         
@@ -151,7 +144,29 @@ class TestViewController: UIViewController {
         UIGraphicsEndImageContext()
     }
     
-    
+    // MARK: Ellipse
+    func drawEllipse(from fromPoint: CGPoint, to toPoint: CGPoint) {
+        UIGraphicsBeginImageContext(view.frame.size)
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return
+        }
+        tempImageView.image?.draw(in: view.bounds)
+        context.clear(UIScreen.main.bounds)
+        
+        // Ellipse path
+        context.addEllipse(in: CGRect(x: fromPoint.x, y: fromPoint.y, width: toPoint.x - fromPoint.x, height: toPoint.y - fromPoint.y))
+        
+        context.setLineCap(.round)
+        context.setBlendMode(.normal)
+        context.setLineWidth(lineWidth)
+        context.setStrokeColor(lineColor.cgColor)
+        
+        context.strokePath()
+        
+        tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
+        tempImageView.alpha = opacity
+        UIGraphicsEndImageContext()
+    }
     
     // MARK: Rectangle
     func drawRectangle(from fromPoint: CGPoint, to toPoint: CGPoint) {
@@ -160,15 +175,15 @@ class TestViewController: UIViewController {
             return
         }
         tempImageView.image?.draw(in: view.bounds)
-       
         context.clear(UIScreen.main.bounds)
         
+        // Rectangle path
         context.addRect(CGRect(x: fromPoint.x, y: fromPoint.y, width: toPoint.x - fromPoint.x, height: toPoint.y - fromPoint.y))
         
         context.setLineCap(.round)
         context.setBlendMode(.normal)
-        context.setLineWidth(brushWidth)
-        context.setStrokeColor(color.cgColor)
+        context.setLineWidth(lineWidth)
+        context.setStrokeColor(lineColor.cgColor)
         
         context.strokePath()
         
@@ -177,9 +192,6 @@ class TestViewController: UIViewController {
         UIGraphicsEndImageContext()
     }
     
-    
-    
-    
     // MARK: Triangle
     func drawTriangle(from fromPoint: CGPoint, to toPoint: CGPoint) {
         UIGraphicsBeginImageContext(view.frame.size)
@@ -187,7 +199,7 @@ class TestViewController: UIViewController {
         tempImageView.image?.draw(in: view.bounds)
         context.clear(UIScreen.main.bounds)
         
-        // Triangle
+        // Triangle path
         let path = UIBezierPath()
         path.move(to: CGPoint(x: fromPoint.x, y: fromPoint.y))
         path.addLine(to: CGPoint(x: toPoint.x, y: fromPoint.y))
@@ -198,8 +210,8 @@ class TestViewController: UIViewController {
         
         context.setLineCap(.round)
         context.setBlendMode(.normal)
-        context.setLineWidth(brushWidth)
-        context.setStrokeColor(color.cgColor)
+        context.setLineWidth(lineWidth)
+        context.setStrokeColor(lineColor.cgColor)
         
         context.strokePath()
         
@@ -207,5 +219,4 @@ class TestViewController: UIViewController {
         tempImageView.alpha = opacity
         UIGraphicsEndImageContext()
     }
-    
 }

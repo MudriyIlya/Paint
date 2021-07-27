@@ -3,6 +3,7 @@ import UIKit
 final class ToolsCollectionViewCell: UICollectionViewCell {
 	private lazy var toolImageView: UIImageView = {
 		let view = UIImageView()
+        view.clipsToBounds = true
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.layer.borderWidth = 1
 		view.layer.backgroundColor = UIColor.black.cgColor
@@ -15,7 +16,6 @@ final class ToolsCollectionViewCell: UICollectionViewCell {
 		setup()
 		updateConstraints()
 	}
-	
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")

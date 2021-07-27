@@ -74,14 +74,14 @@ final class LibraryViewController: UIViewController {
     func fillData() {
 		let image = UIImage(named: "addDrawing")
 		guard let dataImage = image?.pngData() else { return }
-        drawingCollection.append(Drawing(name: "t", imageData: dataImage))
-        drawingCollection.append(Drawing(name: "t1s", imageData: Data()))
-        drawingCollection.append(Drawing(name: "t2sdfdf", imageData: Data()))
-        drawingCollection.append(Drawing(name: "t3", imageData: Data()))
-        drawingCollection.append(Drawing(name: "t2sdfdf", imageData: Data()))
-        drawingCollection.append(Drawing(name: "t3", imageData: Data()))
-        drawingCollection.append(Drawing(name: "t2sdfdf", imageData: Data()))
-        drawingCollection.append(Drawing(name: "t3", imageData: Data()))
+        drawingCollection.append(Drawing(name: "Новый рисунок", imageData: dataImage))
+//        drawingCollection.append(Drawing(name: "изображение2", imageData: Data()))
+//        drawingCollection.append(Drawing(name: "изображение3", imageData: Data()))
+//        drawingCollection.append(Drawing(name: "изображение4", imageData: Data()))
+//        drawingCollection.append(Drawing(name: "изображение5", imageData: Data()))
+//        drawingCollection.append(Drawing(name: "изображение6", imageData: Data()))
+//        drawingCollection.append(Drawing(name: "изображение7", imageData: Data()))
+//        drawingCollection.append(Drawing(name: "изображение8", imageData: Data()))
     }
 }
 
