@@ -113,7 +113,6 @@ final class DrawingViewController: DrawingCanvasViewController {
 	// MARK: - Setup
 	
 	private func setupView() {
-		view.backgroundColor = .white
 		view.addSubview(saveButton)
 		view.addSubview(undoButton)
         view.addSubview(exitButton)
@@ -182,14 +181,6 @@ final class DrawingViewController: DrawingCanvasViewController {
 		])
 	}
 	
-	private func setupActions() {
-		undoButton.onButtonTapAction = { dfs in print("undo")}
-		saveButton.onButtonTapAction = { dfs in print("save")}
-        exitButton.onButtonTapAction = { _ in
-            self.navigationController?.popViewController(animated: true)
-        }
-	}
-	
 	private func changeCollectionViewEdgeInsets() {
 		let layoutMargins: CGFloat = self.toolsCollectionView.layoutMargins.left +
 			self.toolsCollectionView.layoutMargins.right
@@ -197,10 +188,38 @@ final class DrawingViewController: DrawingCanvasViewController {
 		self.toolsCollectionView.contentInset = UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
 	}
 	
+    // MARK: Button Actions
+    private func setupActions() {
+        undoButton.onButtonTapAction = { dfs in print("undo")}
+        saveButton.onButtonTapAction = { _ in
+            self.saveDrawing()
+            self.backToLibrary()
+        }
+        exitButton.onButtonTapAction = { _ in
+            self.backToLibrary()
+        }
+    }
+    
 	@objc private func openColors() {
 		colorsTableView.isHidden.toggle()
 		colorButton.isHidden.toggle()
 	}
+    
+    @objc private func saveDrawing() {
+        if let imageToSave = mainImageView.image,
+           let pngRepresentation = imageToSave.pngData() {
+            guard let time = DateToday.currentTime else { return }
+            let imageName = "name" + time
+            let drawingToSave = Drawing(name: imageName, imageData: pngRepresentation)
+            DispatchQueue.global(qos: .background).async {
+                StorageService.shared.save(drawing: drawingToSave)
+            }
+        }
+    }
+    
+    private func backToLibrary() {
+        self.navigationController?.popViewController(animated: true)
+    }
 }
 
 // MARK: Extension TableView Delegate

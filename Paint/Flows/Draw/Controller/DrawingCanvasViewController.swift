@@ -19,7 +19,7 @@ class DrawingCanvasViewController: UIViewController {
     private var currentPoint = CGPoint.zero
     private var swiped = false
     
-    private lazy var mainImageView: UIImageView = {
+    private(set) lazy var mainImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.frame = self.view.frame
         return imageView

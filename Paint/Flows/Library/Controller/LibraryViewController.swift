@@ -61,27 +61,30 @@ final class LibraryViewController: UIViewController {
 	
 	private func setupNavigationBar() {
 		title = "You have \(drawingCollection.count) drawings"
-		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(someMethod))
+		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(navigateToDrawingViewController))
 	}
 	
 	// TODO: - testMethod
     #warning("наверное надо унести в координатор")
-	@objc func someMethod() {
+	@objc func navigateToDrawingViewController() {
 		navigationController?.pushViewController(DrawingViewController(), animated: true)
 	}
     
     // MARK: - test fill
     func fillData() {
-		let image = UIImage(named: "addDrawing")
-		guard let dataImage = image?.pngData() else { return }
+        
+        #warning("Сделать загрузку изображений из хранилища")
+        
+        let image = UIImage(named: "addDrawing")
+        guard let dataImage = image?.pngData() else { return }
         drawingCollection.append(Drawing(name: "Новый рисунок", imageData: dataImage))
-//        drawingCollection.append(Drawing(name: "изображение2", imageData: Data()))
-//        drawingCollection.append(Drawing(name: "изображение3", imageData: Data()))
-//        drawingCollection.append(Drawing(name: "изображение4", imageData: Data()))
-//        drawingCollection.append(Drawing(name: "изображение5", imageData: Data()))
-//        drawingCollection.append(Drawing(name: "изображение6", imageData: Data()))
-//        drawingCollection.append(Drawing(name: "изображение7", imageData: Data()))
-//        drawingCollection.append(Drawing(name: "изображение8", imageData: Data()))
+        
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            self?.drawingCollection += StorageService.shared.restoreImages()
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.reloadData()
+            }
+        }
     }
 }
 
@@ -104,7 +107,13 @@ extension LibraryViewController: UICollectionViewDelegate, UICollectionViewDataS
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		if indexPath.row == 0 {
-			someMethod()
-		}
+			navigateToDrawingViewController()
+        } else {
+            let drawingViewController = DrawingViewController()
+            let selectedDrawing = drawingCollection[indexPath.row]
+            #warning("Передавать выбранную картинку в канвас для рисовния")
+//            drawingViewController.mainImageView.image = UIImage(data: selectedDrawing.imageData)
+            navigationController?.pushViewController(drawingViewController, animated: true)
+        }
 	}
 }
