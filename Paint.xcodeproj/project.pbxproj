@@ -94,8 +94,7 @@
 		A2521DE426AC026D009270A5 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
-				A2CAB7A526B0B9C900482C5D /* StorageService.swift */,
-				A2CAB7A726B0D4D100482C5D /* DateToday.swift */,
+				A2CAB7A926B1A8D200482C5D /* Services */,
 				A2521DE526AC0287009270A5 /* Library */,
 				A2521DE626AC028E009270A5 /* Draw */,
 			);
@@ -146,6 +145,15 @@
 				A2CAB7A126B0AC8000482C5D /* Tool.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		A2CAB7A926B1A8D200482C5D /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A2CAB7A526B0B9C900482C5D /* StorageService.swift */,
+				A2CAB7A726B0D4D100482C5D /* DateToday.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		B4E4C9D226AC0859009AD0A6 /* Model */ = {

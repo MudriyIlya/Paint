@@ -86,7 +86,7 @@ final class DrawingViewController: DrawingCanvasViewController {
 	
     // TODO: сделать colors
 	#warning("сделай выбор цвета")
-    var colors: [UIColor] = [.black, .red, .cyan, .yellow, .blue, .green, .black, .brown, .magenta, .systemPink, .orange, .gray, .purple, .brown]
+    var colors: [UIColor] = [.black, .gray, .red, .orange, .yellow, .green, .cyan, .blue, .magenta, .purple, .brown]
     
 	// MARK: - Lifecycle
 	
@@ -99,7 +99,6 @@ final class DrawingViewController: DrawingCanvasViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		navigationController?.navigationBar.isHidden = true
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -108,7 +107,7 @@ final class DrawingViewController: DrawingCanvasViewController {
 		rightGradientView.setupGradientLayer()
 		toolsCollectionView.selectItem(at: firstIndexPath, animated: true, scrollPosition: .centeredHorizontally)
 	}
-	
+    
 	override var prefersStatusBarHidden: Bool {
 		return true
 	}
@@ -190,6 +189,11 @@ final class DrawingViewController: DrawingCanvasViewController {
 		let sideInset = (self.view.frame.width / 2) - layoutMargins
 		self.toolsCollectionView.contentInset = UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
 	}
+    
+//     MARK: Setup Graphics
+//    override func openImage(with image: UIImage) {
+//        super.openImage(with: image)
+//    }
 	
     // MARK: Button Actions
     private func setupActions() {
@@ -212,7 +216,7 @@ final class DrawingViewController: DrawingCanvasViewController {
         if let imageToSave = mainImageView.image,
            let pngRepresentation = imageToSave.pngData() {
             guard let time = DateToday.currentTime else { return }
-            let imageName = "name" + time
+            let imageName = "image\(StorageService.countImages) " + time
             let drawingToSave = Drawing(name: imageName, imageData: pngRepresentation)
             DispatchQueue.global(qos: .background).async {
                 StorageService.shared.save(drawing: drawingToSave)

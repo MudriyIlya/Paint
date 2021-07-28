@@ -11,6 +11,10 @@ import UIKit
 struct StorageService {
     
     static let shared = StorageService()
+    static let restoreImages = StorageService().restoreImages()
+    static let countImages = StorageService().count()
+    
+    private init() {  }
     
     // MARK: Save
     
@@ -55,5 +59,18 @@ struct StorageService {
                                             in: .userDomainMask)
         guard let path = urls.first else { return nil }
         return path
+    }
+    
+    private func count() -> Int {
+        if let filePath = documentDirectoryPath() {
+            do {
+                let files = try FileManager.default.contentsOfDirectory(atPath: filePath.path)
+                return files.filter { $0.hasSuffix(".png") }.count
+            }
+            catch let error {
+                print("Reading path error: ", error)
+            }
+        }
+        return 0
     }
 }
