@@ -40,11 +40,18 @@ final class LibraryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-		setupConstraints()
-        setupView()
+        setupNavigationBar()
+        setupConstraints()
     }
 
-	private func setupConstraints() {
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.isHidden = false
+        loadDataFromStorage()
+    }
+	
+    // MARK: Setup Views
+    
+    private func setupConstraints() {
 		self.view.addSubview(collectionView)
 		NSLayoutConstraint.activate([
 			collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
@@ -54,34 +61,33 @@ final class LibraryViewController: UIViewController {
 		])
 	}
 	
-    private func setupView() {
-		fillData()
-		setupNavigationBar()
+    private func setupNavigationBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(navigateToDrawingViewController))
     }
 	
-	private func setupNavigationBar() {
-		title = "You have \(drawingCollection.count) drawings"
-		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(navigateToDrawingViewController))
-	}
-	
-	// TODO: - testMethod
-    #warning("наверное надо унести в координатор")
+    // MARK: Navigation
+	// TODO: - НАВИГАЦИЯ
+    #warning("разобраться с навигацией")
 	@objc func navigateToDrawingViewController() {
 		navigationController?.pushViewController(DrawingViewController(), animated: true)
 	}
     
     // MARK: - test fill
-    func fillData() {
-        
-        #warning("Сделать загрузку изображений из хранилища")
+    func loadDataFromStorage() {
         
         let image = UIImage(named: "addDrawing")
         guard let dataImage = image?.pngData() else { return }
+        drawingCollection = [Drawing]()
         drawingCollection.append(Drawing(name: "Новый рисунок", imageData: dataImage))
         
         DispatchQueue.global(qos: .background).async { [weak self] in
-            self?.drawingCollection += StorageService.shared.restoreImages()
+            self?.drawingCollection += StorageService.restoreImages
             DispatchQueue.main.async { [weak self] in
+                guard var drawingCount = self?.drawingCollection.count else { return }
+                if drawingCount >= 1 {
+                    drawingCount -= 1
+                }
+                self?.title = "You have \(drawingCount) drawings"
                 self?.collectionView.reloadData()
             }
         }
@@ -111,8 +117,8 @@ extension LibraryViewController: UICollectionViewDelegate, UICollectionViewDataS
         } else {
             let drawingViewController = DrawingViewController()
             let selectedDrawing = drawingCollection[indexPath.row]
-            #warning("Передавать выбранную картинку в канвас для рисовния")
-//            drawingViewController.mainImageView.image = UIImage(data: selectedDrawing.imageData)
+            guard let imageToOpen = UIImage(data: selectedDrawing.imageData) else { return }
+            drawingViewController.openImage(with: imageToOpen)
             navigationController?.pushViewController(drawingViewController, animated: true)
         }
 	}

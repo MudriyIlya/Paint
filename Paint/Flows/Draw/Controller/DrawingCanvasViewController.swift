@@ -19,6 +19,8 @@ class DrawingCanvasViewController: UIViewController {
     private var currentPoint = CGPoint.zero
     private var swiped = false
     
+    private var openedImage: UIImage?
+    
     private(set) lazy var mainImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.frame = self.view.frame
@@ -34,6 +36,9 @@ class DrawingCanvasViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let image = openedImage {
+            self.mainImageView.image = image
+        }
         setupView()
     }
     
@@ -41,6 +46,11 @@ class DrawingCanvasViewController: UIViewController {
         self.view.backgroundColor = .white
         self.view.addSubview(mainImageView)
         self.view.addSubview(tempImageView)
+    }
+    
+    // MARK: - Setup Graphics
+    public func openImage(with image: UIImage) {
+        self.openedImage = image
     }
     
     // MARK: - Touch

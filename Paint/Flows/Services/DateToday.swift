@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 struct DateToday {
     
@@ -17,6 +16,7 @@ struct DateToday {
     private init() {
         let today = Date()
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ru_RU")
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         getCurrentDate = formatter.string(from: today)
     }
