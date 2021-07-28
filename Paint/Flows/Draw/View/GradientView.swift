@@ -20,6 +20,7 @@ final class GradientView: UIView {
 		self.direction = direction
 		super.init(frame: .zero)
 		translatesAutoresizingMaskIntoConstraints = false
+		isUserInteractionEnabled = false
 	}
 	
 	required init?(coder: NSCoder) {
@@ -40,7 +41,7 @@ final class GradientView: UIView {
 	func setupGradientLayer() {
 		setupGradientDirection()
 		self.gradient.removeFromSuperlayer()
-		self.gradient.frame = CGRect(x: 0, y: 0, width: self.bounds.width * 0.8, height: self.bounds.height)
+		self.gradient.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
 		layer.addSublayer(gradient)
 	}
 }

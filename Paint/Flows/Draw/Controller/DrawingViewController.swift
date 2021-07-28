@@ -82,6 +82,8 @@ final class DrawingViewController: DrawingCanvasViewController {
 		return view
 	}()
 	
+	private let firstIndexPath = IndexPath(row: 0, section: 0)
+	
     // TODO: сделать colors
 	#warning("сделай выбор цвета")
     var colors: [UIColor] = [.black, .red, .cyan, .yellow, .blue, .green, .black, .brown, .magenta, .systemPink, .orange, .gray, .purple, .brown]
@@ -104,6 +106,7 @@ final class DrawingViewController: DrawingCanvasViewController {
 		changeCollectionViewEdgeInsets()
 		leftGradientView.setupGradientLayer()
 		rightGradientView.setupGradientLayer()
+		toolsCollectionView.selectItem(at: firstIndexPath, animated: true, scrollPosition: .centeredHorizontally)
 	}
 	
 	override var prefersStatusBarHidden: Bool {
@@ -162,21 +165,21 @@ final class DrawingViewController: DrawingCanvasViewController {
 		NSLayoutConstraint.activate([
 			toolsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
 			toolsCollectionView.heightAnchor.constraint(equalToConstant: 80),
-			toolsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-			toolsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10)
+			toolsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+			toolsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0)
 		])
 		
 		NSLayoutConstraint.activate([
 			leftGradientView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
 			leftGradientView.heightAnchor.constraint(equalToConstant: 80),
-			leftGradientView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+			leftGradientView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
 			leftGradientView.widthAnchor.constraint(equalToConstant: 100)
 		])
 		
 		NSLayoutConstraint.activate([
 			rightGradientView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
 			rightGradientView.heightAnchor.constraint(equalToConstant: 80),
-			rightGradientView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 10),
+			rightGradientView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
 			rightGradientView.widthAnchor.constraint(equalToConstant: 100)
 		])
 	}
