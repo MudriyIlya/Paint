@@ -189,21 +189,16 @@ final class DrawingViewController: DrawingCanvasViewController {
 		let sideInset = (self.view.frame.width / 2) - layoutMargins
 		self.toolsCollectionView.contentInset = UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
 	}
-    
-//     MARK: Setup Graphics
-//    override func openImage(with image: UIImage) {
-//        super.openImage(with: image)
-//    }
 	
     // MARK: Button Actions
     private func setupActions() {
         undoButton.onButtonTapAction = { dfs in print("undo")}
-        saveButton.onButtonTapAction = { _ in
-            self.saveDrawing()
-            self.backToLibrary()
+        saveButton.onButtonTapAction = { [weak self] _ in
+            self?.saveDrawing()
+            self?.backToLibrary()
         }
-        exitButton.onButtonTapAction = { _ in
-            self.backToLibrary()
+        exitButton.onButtonTapAction = { [weak self] _ in
+            self?.backToLibrary()
         }
     }
     
@@ -216,11 +211,9 @@ final class DrawingViewController: DrawingCanvasViewController {
         if let imageToSave = mainImageView.image,
            let pngRepresentation = imageToSave.pngData() {
             guard let time = DateToday.currentTime else { return }
-            let imageName = "image\(StorageService.countImages) " + time
+            let imageName = "IMG\(StorageService().count() + 1) " + time
             let drawingToSave = Drawing(name: imageName, imageData: pngRepresentation)
-            DispatchQueue.global(qos: .background).async {
-                StorageService.shared.save(drawing: drawingToSave)
-            }
+            StorageService().save(drawing: drawingToSave)
         }
     }
     
