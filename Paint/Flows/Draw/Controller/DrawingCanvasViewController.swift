@@ -20,6 +20,7 @@ class DrawingCanvasViewController: UIViewController {
     private var swiped = false
     
     private var openedImage: UIImage?
+    private var historyImages = [UIImage]()
     
     private(set) lazy var mainImageView: UIImageView = {
         let imageView = UIImageView()
@@ -48,9 +49,15 @@ class DrawingCanvasViewController: UIViewController {
         self.view.addSubview(tempImageView)
     }
     
-    // MARK: - Setup Graphics
     public func openImage(with image: UIImage) {
         self.openedImage = image
+    }
+    
+    public func undoButtonTapped() {
+        if historyImages.count >= 1 {
+            historyImages.removeLast()
+            mainImageView.image = historyImages.last
+        }
     }
     
     // MARK: - Touch
@@ -88,6 +95,8 @@ class DrawingCanvasViewController: UIViewController {
         mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
+        guard let imageToHistory = mainImageView.image else { return }
+        historyImages.append(imageToHistory)
         tempImageView.image = nil
     }
     
@@ -96,16 +105,11 @@ class DrawingCanvasViewController: UIViewController {
 		guard let startPoint = startPoint else { return }
 		let end: CGPoint = endPoint ?? startPoint
         switch pickedTool {
-        case .Pencil:
-            drawLineByPencil(from: startPoint, to: end)
-        case .Line:
-            drawLine(from: startPoint, to: end)
-        case .Rectangle:
-            drawRectangle(from: startPoint, to: end)
-        case .Ellipse:
-            drawEllipse(from: startPoint, to: end)
-        case .Triangle:
-            drawTriangle(from: startPoint, to: end)
+        case .Pencil: drawLineByPencil(from: startPoint, to: end)
+        case .Line: drawLine(from: startPoint, to: end)
+        case .Rectangle: drawRectangle(from: startPoint, to: end)
+        case .Ellipse: drawEllipse(from: startPoint, to: end)
+        case .Triangle: drawTriangle(from: startPoint, to: end)
         }
     }
     
