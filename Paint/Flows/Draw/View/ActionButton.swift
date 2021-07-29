@@ -6,8 +6,8 @@
 //
 
 import UIKit
-//MARK: ActionButton название
-final class Button: UIButton {
+
+final class ActionButton: UIButton {
 	private let imageName: String
 	
 	var onButtonTapAction: ((UIButton) -> ())?

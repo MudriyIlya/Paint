@@ -13,24 +13,25 @@ final class DrawingViewController: DrawingCanvasViewController {
 	// MARK: Variables
 	
 	private var centerCell: ToolsCollectionViewCell?
+	private var currentName: String?
 	
-	private lazy var undoButton: Button = {
-		let button = Button(imageName: "refresh")
+	private lazy var undoButton: ActionButton = {
+		let button = ActionButton(imageName: "refresh")
 		//button.backgroundColor = .blue
 		return button
 	}()
 	
-	private lazy var saveButton: Button = {
-		let button = Button(imageName: "check")
+	private lazy var saveButton: ActionButton = {
+		let button = ActionButton(imageName: "check")
 		//button.backgroundColor = .red
 		return button
 	}()
-    
-    private lazy var exitButton: Button = {
-        let button = Button(imageName: "exit")
-        //button.backgroundColor = .red
-        return button
-    }()
+	
+	private lazy var exitButton: ActionButton = {
+		let button = ActionButton(imageName: "exit")
+		//button.backgroundColor = .red
+		return button
+	}()
 	
 	// MARK: Color Picker
 	private lazy var colorButton: UIButton = {
@@ -65,10 +66,8 @@ final class DrawingViewController: DrawingCanvasViewController {
 		collectionView.backgroundColor = .clear
 		collectionView.showsVerticalScrollIndicator = false
 		collectionView.showsHorizontalScrollIndicator = false
-		
 		collectionView.delegate = self
 		collectionView.dataSource = self
-		
 		return collectionView
 	}()
 	
@@ -84,10 +83,19 @@ final class DrawingViewController: DrawingCanvasViewController {
 	
 	private let firstIndexPath = IndexPath(row: 0, section: 0)
 	
-    // TODO: сделать colors
+	// TODO: сделать colors
 	#warning("сделай выбор цвета")
-    var colors: [UIColor] = [.black, .gray, .red, .orange, .yellow, .green, .cyan, .blue, .magenta, .purple, .brown]
-    
+	var colors: [UIColor] = [.black, .gray, .red, .orange, .yellow, .green, .cyan, .blue, .magenta, .purple, .brown]
+	
+	init(currentName: String?) {
+		super.init(nibName: nil, bundle: nil)
+		self.currentName = currentName
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
 	// MARK: - Lifecycle
 	
 	override func viewDidLoad() {
@@ -99,6 +107,7 @@ final class DrawingViewController: DrawingCanvasViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		navigationController?.navigationBar.isHidden = true
+		toolsCollectionView.selectItem(at: firstIndexPath, animated: false, scrollPosition: .centeredHorizontally)
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -107,7 +116,7 @@ final class DrawingViewController: DrawingCanvasViewController {
 		rightGradientView.setupGradientLayer()
 		toolsCollectionView.selectItem(at: firstIndexPath, animated: true, scrollPosition: .centeredHorizontally)
 	}
-    
+	
 	override var prefersStatusBarHidden: Bool {
 		return true
 	}
@@ -117,7 +126,7 @@ final class DrawingViewController: DrawingCanvasViewController {
 	private func setupView() {
 		view.addSubview(saveButton)
 		view.addSubview(undoButton)
-        view.addSubview(exitButton)
+		view.addSubview(exitButton)
 		view.addSubview(colorButton)
 		view.addSubview(colorsTableView)
 		view.addSubview(toolsCollectionView)
@@ -140,13 +149,13 @@ final class DrawingViewController: DrawingCanvasViewController {
 			undoButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor)
 		])
 		
-        NSLayoutConstraint.activate([
-            exitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+		NSLayoutConstraint.activate([
+			exitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
 			exitButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            exitButton.widthAnchor.constraint(equalToConstant: 20),
-            exitButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor)
-        ])
-        
+			exitButton.widthAnchor.constraint(equalToConstant: 20),
+			exitButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor)
+		])
+		
 		NSLayoutConstraint.activate([
 			colorButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
 			colorButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
@@ -196,32 +205,53 @@ final class DrawingViewController: DrawingCanvasViewController {
             self?.undoButtonTapped()
         }
         saveButton.onButtonTapAction = { [weak self] _ in
-            self?.saveDrawing()
-            self?.backToLibrary()
+			self?.showNameAlertController()
         }
         exitButton.onButtonTapAction = { [weak self] _ in
             self?.backToLibrary()
         }
     }
-    
+	
 	@objc private func openColors() {
 		colorsTableView.isHidden.toggle()
 		colorButton.isHidden.toggle()
 	}
-    
-    @objc private func saveDrawing() {
-        if let imageToSave = mainImageView.image,
-           let pngRepresentation = imageToSave.pngData() {
-            guard let time = DateToday.currentTime else { return }
-            let imageName = "IMG\(StorageService().count() + 1) " + time
-            let drawingToSave = Drawing(name: imageName, imageData: pngRepresentation)
-            StorageService().save(drawing: drawingToSave)
-        }
-    }
-    
-    private func backToLibrary() {
-        self.navigationController?.popViewController(animated: true)
-    }
+	
+	@objc private func saveDrawing(drawingName: String) {
+		guard
+			let imageToSave = mainImageView.image,
+			let pngRepresentation = imageToSave.pngData()
+		else { return }
+		let drawingToSave = Drawing(name: drawingName, imageData: pngRepresentation)
+		StorageService().save(drawing: drawingToSave)
+	}
+	
+	private func backToLibrary() {
+		self.navigationController?.popViewController(animated: true)
+	}
+	
+	private func showNameAlertController() {
+		let nameAlertController = UIAlertController(title: "Введите название", message: nil, preferredStyle: .alert)
+		
+		nameAlertController.addTextField { [weak self] (textField: UITextField) in
+			textField.placeholder = "Название"
+			textField.text = self?.currentName ?? ""
+		}
+		
+		let saveAndReturnAction = UIAlertAction(title: "Сохранить", style: .default) { [weak self] _ in
+			guard var drawingName = nameAlertController.textFields?.first?.text else { return }
+			if drawingName == "" { drawingName = "IMG\(StorageService().count() + 1)" }
+			self?.saveDrawing(drawingName: drawingName)
+			self?.backToLibrary()
+		}
+		
+		let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+		
+		nameAlertController.addAction(saveAndReturnAction)
+		nameAlertController.addAction(cancelAction)
+		
+		self.navigationController?.present(nameAlertController, animated: true, completion: nil)
+	}
 }
 
 // MARK: Extension TableView Delegate
@@ -245,8 +275,8 @@ extension DrawingViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		colorButton.backgroundColor = colors[indexPath.row]
-        // TODO: изменять цвет
-        lineColor = colors[indexPath.row]
+		// TODO: изменять цвет
+		lineColor = colors[indexPath.row]
 		openColors()
 		tableView.deselectRow(at: indexPath, animated: true)
 	}
@@ -260,21 +290,21 @@ extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataS
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "toolsCell", for: indexPath) as? ToolsCollectionViewCell else { return UICollectionViewCell() }
-        var imageTool = UIImage()
-        #warning("переписать force unwrap'ы")
-        switch tools[indexPath.row] {
-        case .Pencil:
-            imageTool = UIImage(named: "pencil")!
-        case .Line:
-            imageTool = UIImage(named: "line")!
-        case .Rectangle:
-            imageTool = UIImage(named: "rectangle")!
-        case .Ellipse:
-            imageTool = UIImage(named: "ellipse")!
-        case .Triangle:
-            imageTool = UIImage(named: "triangle")!
-        }
-        cell.setImage(image: imageTool)
+		var imageTool = UIImage()
+		#warning("переписать force unwrap'ы")
+		switch tools[indexPath.row] {
+		case .Pencil:
+			imageTool = UIImage(named: "pencil")!
+		case .Line:
+			imageTool = UIImage(named: "line")!
+		case .Rectangle:
+			imageTool = UIImage(named: "rectangle")!
+		case .Ellipse:
+			imageTool = UIImage(named: "ellipse")!
+		case .Triangle:
+			imageTool = UIImage(named: "triangle")!
+		}
+		cell.setImage(image: imageTool)
 		return cell
 	}
 	
@@ -290,7 +320,7 @@ extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataS
 		if let indexPath = self.toolsCollectionView.indexPathForItem(at: centerPoint) {
 			centerCell = (self.toolsCollectionView.cellForItem(at: indexPath) as? ToolsCollectionViewCell )
 			centerCell?.transformToLarge()
-            pickedTool = tools[indexPath.row]
+			pickedTool = tools[indexPath.row]
 		}
 		
 		if let cell = self.centerCell {

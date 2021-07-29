@@ -109,7 +109,7 @@ final class LibraryViewController: UIViewController {
     // MARK: Navigation
     
 	@objc func navigateToDrawingViewController() {
-		navigationController?.pushViewController(DrawingViewController(), animated: true)
+		navigationController?.pushViewController(DrawingViewController(currentName: nil), animated: true)
 	}
     
     // MARK: - Load Data From Storage
@@ -148,8 +148,8 @@ extension LibraryViewController: UICollectionViewDelegate, UICollectionViewDataS
 		if indexPath.row == 0 {
 			navigateToDrawingViewController()
         } else {
-            let drawingViewController = DrawingViewController()
-            let selectedDrawing = drawingCollection[indexPath.row]
+			let selectedDrawing = drawingCollection[indexPath.row]
+			let drawingViewController = DrawingViewController(currentName: selectedDrawing.name)
             guard let imageToOpen = UIImage(data: selectedDrawing.imageData) else { return }
             drawingViewController.openImage(with: imageToOpen)
             navigationController?.pushViewController(drawingViewController, animated: true)

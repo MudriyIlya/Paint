@@ -15,6 +15,8 @@ final class LibraryCollectionViewCell: UICollectionViewCell {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.numberOfLines = 2
+		label.font = UIFont.systemFont(ofSize: 8)
+		label.textColor = .black
 		label.textAlignment = .center
 		label.backgroundColor = .white
 		return label
@@ -41,12 +43,13 @@ final class LibraryCollectionViewCell: UICollectionViewCell {
 	// MARK: Setup
 	
 	private func setupConstraints() {
-		contentView.addSubview(drawingName)
 		contentView.addSubview(drawing)
+		contentView.addSubview(drawingName)
 		
 		NSLayoutConstraint.activate([
 			drawingName.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0),
 			drawingName.topAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 20),
+			drawingName.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
 			drawingName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
 			drawingName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5)
 		])
