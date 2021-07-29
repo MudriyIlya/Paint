@@ -15,8 +15,8 @@ class DrawingCanvasViewController: UIViewController {
     var pickedTool: Tool = .Pencil
     private(set) var tools: [Tool] = [.Pencil, .Line, .Rectangle, .Ellipse, .Triangle]
     private var opacity: CGFloat = 1.0
-    private var lastPoint = CGPoint.zero
-    private var currentPoint = CGPoint.zero
+	private var lastPoint: CGPoint?
+	private var currentPoint: CGPoint?
     private var swiped = false
     
     private var openedImage: UIImage?
@@ -92,18 +92,20 @@ class DrawingCanvasViewController: UIViewController {
     }
     
     // MARK: - Drawing
-    private func draw(from startPoint: CGPoint, to endPoint: CGPoint) {
+    private func draw(from startPoint: CGPoint?, to endPoint: CGPoint?) {
+		guard let startPoint = startPoint else { return }
+		let end: CGPoint = endPoint ?? startPoint
         switch pickedTool {
         case .Pencil:
-            drawLineByPencil(from: startPoint, to: endPoint)
+            drawLineByPencil(from: startPoint, to: end)
         case .Line:
-            drawLine(from: startPoint, to: endPoint)
+            drawLine(from: startPoint, to: end)
         case .Rectangle:
-            drawRectangle(from: startPoint, to: endPoint)
+            drawRectangle(from: startPoint, to: end)
         case .Ellipse:
-            drawEllipse(from: startPoint, to: endPoint)
+            drawEllipse(from: startPoint, to: end)
         case .Triangle:
-            drawTriangle(from: startPoint, to: endPoint)
+            drawTriangle(from: startPoint, to: end)
         }
     }
     
@@ -136,6 +138,7 @@ class DrawingCanvasViewController: UIViewController {
         guard let context = UIGraphicsGetCurrentContext() else {
             return
         }
+		guard fromPoint != toPoint else { return }
         tempImageView.image?.draw(in: view.bounds)
         context.clear(UIScreen.main.bounds)
         
@@ -160,6 +163,7 @@ class DrawingCanvasViewController: UIViewController {
         guard let context = UIGraphicsGetCurrentContext() else {
             return
         }
+		guard fromPoint != toPoint else { return }
         tempImageView.image?.draw(in: view.bounds)
         context.clear(UIScreen.main.bounds)
         
@@ -184,6 +188,7 @@ class DrawingCanvasViewController: UIViewController {
         guard let context = UIGraphicsGetCurrentContext() else {
             return
         }
+		guard fromPoint != toPoint else { return }
         tempImageView.image?.draw(in: view.bounds)
         context.clear(UIScreen.main.bounds)
         
@@ -206,6 +211,7 @@ class DrawingCanvasViewController: UIViewController {
     func drawTriangle(from fromPoint: CGPoint, to toPoint: CGPoint) {
         UIGraphicsBeginImageContext(view.frame.size)
         guard let context = UIGraphicsGetCurrentContext() else { return }
+		guard fromPoint != toPoint else { return }
         tempImageView.image?.draw(in: view.bounds)
         context.clear(UIScreen.main.bounds)
         

@@ -128,35 +128,35 @@ final class DrawingViewController: DrawingCanvasViewController {
 	private func setupConstraints() {
 		NSLayoutConstraint.activate([
 			saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-			saveButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+			saveButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
 			saveButton.widthAnchor.constraint(equalToConstant: 20),
 			saveButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor)
 		])
 		
 		NSLayoutConstraint.activate([
 			undoButton.trailingAnchor.constraint(equalTo: saveButton.leadingAnchor, constant: -15),
-			undoButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+			undoButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
 			undoButton.widthAnchor.constraint(equalToConstant: 20),
 			undoButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor)
 		])
 		
         NSLayoutConstraint.activate([
             exitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            exitButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+			exitButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             exitButton.widthAnchor.constraint(equalToConstant: 20),
             exitButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor)
         ])
         
 		NSLayoutConstraint.activate([
 			colorButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-			colorButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
+			colorButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
 			colorButton.widthAnchor.constraint(equalToConstant: 30),
 			colorButton.heightAnchor.constraint(equalToConstant: 30)
 		])
 		
 		NSLayoutConstraint.activate([
 			colorsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-			colorsTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
+			colorsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
 			colorsTableView.widthAnchor.constraint(equalToConstant: 30),
 			colorsTableView.heightAnchor.constraint(equalToConstant: 7 * 30)
 		])
