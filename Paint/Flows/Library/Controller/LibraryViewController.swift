@@ -66,31 +66,23 @@ final class LibraryViewController: UIViewController {
     }
 	
     // MARK: Navigation
-	// TODO: - НАВИГАЦИЯ
-    #warning("разобраться с навигацией")
 	@objc func navigateToDrawingViewController() {
 		navigationController?.pushViewController(DrawingViewController(), animated: true)
 	}
     
-    // MARK: - test fill
+    // MARK: - Load Data From Storage
+    
     func loadDataFromStorage() {
         
         let image = UIImage(named: "addDrawing")
         guard let dataImage = image?.pngData() else { return }
         drawingCollection = [Drawing]()
         drawingCollection.append(Drawing(name: "Новый рисунок", imageData: dataImage))
-        
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            self?.drawingCollection += StorageService.restoreImages
-            DispatchQueue.main.async { [weak self] in
-                guard var drawingCount = self?.drawingCollection.count else { return }
-                if drawingCount >= 1 {
-                    drawingCount -= 1
-                }
-                self?.title = "You have \(drawingCount) drawings"
-                self?.collectionView.reloadData()
-            }
+        StorageService().restoreImages().forEach { [weak self] in
+            self?.drawingCollection.append($0)
         }
+        title = "You have \(drawingCollection.count - 1) drawings"
+        collectionView.reloadData()
     }
 }
 

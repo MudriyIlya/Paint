@@ -10,12 +10,6 @@ import UIKit
 
 struct StorageService {
     
-    static let shared = StorageService()
-    static let restoreImages = StorageService().restoreImages()
-    static let countImages = StorageService().count()
-    
-    private init() {  }
-    
     // MARK: Save
     
     public func save(drawing: Drawing) {
@@ -23,7 +17,6 @@ struct StorageService {
         let filePath = directoryPath.appendingPathComponent(drawing.name + ".png")
         do {
             try drawing.imageData.write(to: filePath)
-            print("Фотка сохранена")
         } catch let error {
             print("Save to file system error: ", error)
         }
@@ -45,7 +38,7 @@ struct StorageService {
                         drawings.append(Drawing(name: filePath.deletingPathExtension().lastPathComponent,
                                                 imageData: fileData))
                     }
-                return drawings
+                return drawings.sorted { $0.name > $1.name}
             } catch let error {
                 print("Reading error: ", error)
             }
@@ -61,7 +54,7 @@ struct StorageService {
         return path
     }
     
-    private func count() -> Int {
+    public func count() -> Int {
         if let filePath = documentDirectoryPath() {
             do {
                 let files = try FileManager.default.contentsOfDirectory(atPath: filePath.path)
