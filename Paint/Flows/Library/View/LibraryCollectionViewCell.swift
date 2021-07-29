@@ -31,6 +31,7 @@ final class LibraryCollectionViewCell: UICollectionViewCell {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		setupConstraints()
+        self.backgroundColor = UIColor(red: 0.027, green: 0.198, blue: 1, alpha: 0.1)
 	}
 	
 	required init?(coder: NSCoder) {
