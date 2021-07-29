@@ -81,8 +81,6 @@ final class DrawingViewController: DrawingCanvasViewController {
 		return view
 	}()
 	
-	private let firstIndexPath = IndexPath(row: 0, section: 0)
-	
 	// TODO: сделать colors
 	#warning("сделай выбор цвета")
 	var colors: [UIColor] = [.black, .gray, .red, .orange, .yellow, .green, .cyan, .blue, .magenta, .purple, .brown]
@@ -107,14 +105,13 @@ final class DrawingViewController: DrawingCanvasViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		navigationController?.navigationBar.isHidden = true
-		toolsCollectionView.selectItem(at: firstIndexPath, animated: false, scrollPosition: .centeredHorizontally)
+		changeCollectionViewEdgeInsets()
+		toolsCollectionView.contentOffset.x = -130
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
-		changeCollectionViewEdgeInsets()
 		leftGradientView.setupGradientLayer()
 		rightGradientView.setupGradientLayer()
-		toolsCollectionView.selectItem(at: firstIndexPath, animated: true, scrollPosition: .centeredHorizontally)
 	}
 	
 	override var prefersStatusBarHidden: Bool {
@@ -275,7 +272,6 @@ extension DrawingViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		colorButton.backgroundColor = colors[indexPath.row]
-		// TODO: изменять цвет
 		lineColor = colors[indexPath.row]
 		openColors()
 		tableView.deselectRow(at: indexPath, animated: true)
@@ -314,9 +310,10 @@ extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataS
 	}
 	
 	func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		guard scrollView == toolsCollectionView else { return }
 		let centerPoint = CGPoint(x: self.toolsCollectionView.frame.size.width / 2 + scrollView.contentOffset.x,
 								  y: self.toolsCollectionView.frame.size.height / 2 + scrollView.contentOffset.y)
-		
+		print(toolsCollectionView.contentOffset)
 		if let indexPath = self.toolsCollectionView.indexPathForItem(at: centerPoint) {
 			centerCell = (self.toolsCollectionView.cellForItem(at: indexPath) as? ToolsCollectionViewCell )
 			centerCell?.transformToLarge()
