@@ -192,7 +192,9 @@ final class DrawingViewController: DrawingCanvasViewController {
 	
     // MARK: Button Actions
     private func setupActions() {
-        undoButton.onButtonTapAction = { dfs in print("undo")}
+        undoButton.onButtonTapAction = { [weak self] _ in
+            self?.undoButtonTapped()
+        }
         saveButton.onButtonTapAction = { [weak self] _ in
             self?.saveDrawing()
             self?.backToLibrary()
