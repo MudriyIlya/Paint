@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+//MARK: ActionButton название
 final class Button: UIButton {
 	private let imageName: String
 	
@@ -32,15 +32,9 @@ final class Button: UIButton {
 		onButtonTapAction?(self)
 	}
 	
-	// TODO: Пофиксить
-    #warning("посмотреть как нажимаются маленькие кнопки")
-//	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-//		let view = self
-//		view.frame = CGRect(x: view.frame.origin.x - 5,
-//							y: view.frame.origin.y - 5,
-//							width: view.frame.width + 10,
-//							height: view.frame.height + 10)
-//		return view
-//	}
-	
+	override func point(inside point: CGPoint, with _: UIEvent?) -> Bool {
+		let margin: CGFloat = 5
+		let area = self.bounds.insetBy(dx: -margin, dy: -margin)
+		return area.contains(point)
+	}
 }
