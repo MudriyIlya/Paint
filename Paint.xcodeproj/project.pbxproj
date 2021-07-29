@@ -25,7 +25,7 @@
 		E7ADD05126B0620500B3F39C /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7ADD05026B0620500B3F39C /* Direction.swift */; };
 		E7F267BD26AED9680068A648 /* ToolsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F267BC26AED9680068A648 /* ToolsCollectionViewCell.swift */; };
 		E7F267C426AF0A8A0068A648 /* ToolsCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F267C326AF0A8A0068A648 /* ToolsCollectionViewFlowLayout.swift */; };
-		E7F8B09826AC1E6B00AE0B49 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8B09726AC1E6B00AE0B49 /* Button.swift */; };
+		E7F8B09826AC1E6B00AE0B49 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8B09726AC1E6B00AE0B49 /* ActionButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,7 +49,7 @@
 		E7ADD05026B0620500B3F39C /* Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
 		E7F267BC26AED9680068A648 /* ToolsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolsCollectionViewCell.swift; sourceTree = "<group>"; };
 		E7F267C326AF0A8A0068A648 /* ToolsCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolsCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
-		E7F8B09726AC1E6B00AE0B49 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		E7F8B09726AC1E6B00AE0B49 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,7 +196,7 @@
 			children = (
 				E7F267BB26AED9060068A648 /* ToolsCollectionViewCell */,
 				E7F267BA26AED8DA0068A648 /* ColorsTableViewCell */,
-				E7F8B09726AC1E6B00AE0B49 /* Button.swift */,
+				E7F8B09726AC1E6B00AE0B49 /* ActionButton.swift */,
 				E7ADD04A26B05AF400B3F39C /* GradientView.swift */,
 			);
 			path = View;
@@ -280,7 +280,7 @@
 				E7F267BD26AED9680068A648 /* ToolsCollectionViewCell.swift in Sources */,
 				E7F267C426AF0A8A0068A648 /* ToolsCollectionViewFlowLayout.swift in Sources */,
 				E72EC7F526AD9FC300A2766F /* FirstColorsTableViewCell.swift in Sources */,
-				E7F8B09826AC1E6B00AE0B49 /* Button.swift in Sources */,
+				E7F8B09826AC1E6B00AE0B49 /* ActionButton.swift in Sources */,
 				A2CAB7A826B0D4D100482C5D /* DateToday.swift in Sources */,
 				B4E4C9D126AC07F5009AD0A6 /* LibraryCollectionViewCell.swift in Sources */,
 				A2521DD326ABF82F009270A5 /* LibraryViewController.swift in Sources */,
