@@ -105,6 +105,7 @@ final class DrawingViewController: DrawingCanvasViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+		navigationController?.setNavigationBarHidden(true, animated: false)
 		changeCollectionViewEdgeInsets()
 	}
 	
