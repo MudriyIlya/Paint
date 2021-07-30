@@ -43,6 +43,15 @@ class DrawingCanvasViewController: UIViewController {
         setupView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     private func setupView() {
         self.view.backgroundColor = .white
         self.view.addSubview(mainImageView)

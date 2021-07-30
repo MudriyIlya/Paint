@@ -26,6 +26,7 @@ final class LibraryViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
         loadDataFromStorage()
     }
@@ -49,14 +50,13 @@ final class LibraryViewController: UIViewController {
     }
 	
     private func setupCollectionView() {
-        
-        let inset: CGFloat = 2.5
+        let inset: CGFloat = 1.0
         let widthOfScreen = UIScreen.main.bounds.width
         
         // Large item
         
-        let largeItemSize = NSCollectionLayoutSize(widthDimension: .absolute(widthOfScreen * 2/3),
-                                                   heightDimension: .absolute(widthOfScreen * 2/3))
+        let largeItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(2/3),
+                                                   heightDimension: .fractionalHeight(1))
         let largeItem = NSCollectionLayoutItem(layoutSize: largeItemSize)
         largeItem.contentInsets = NSDirectionalEdgeInsets(top: inset,
                                                           leading: inset,
@@ -65,8 +65,8 @@ final class LibraryViewController: UIViewController {
         
         // Small item
         
-        let smallItemSize = NSCollectionLayoutSize(widthDimension: .absolute(widthOfScreen * 1/3),
-                                                   heightDimension: .absolute(widthOfScreen * 1/3))
+        let smallItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                   heightDimension: .fractionalHeight(1))
         let smallItem = NSCollectionLayoutItem(layoutSize: smallItemSize)
         smallItem.contentInsets = NSDirectionalEdgeInsets(top: inset,
                                                           leading: inset,
@@ -74,8 +74,7 @@ final class LibraryViewController: UIViewController {
                                                           trailing: inset)
         
         // Top line
-        
-        let topNestedGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(widthOfScreen),
+        let topNestedGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                         heightDimension: .absolute(widthOfScreen * 1/3))
         let topNestedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: topNestedGroupSize,
                                                                 subitem: smallItem,
@@ -83,27 +82,26 @@ final class LibraryViewController: UIViewController {
         
         // Side nested group
         
-        let sideNestedGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(widthOfScreen * 1/3),
-                                                          heightDimension: .absolute(widthOfScreen * 2/3))
+        let sideNestedGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3),
+                                                          heightDimension: .fractionalHeight(1))
         let sideNestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: sideNestedGroupSize,
-                                                               subitems: [smallItem])
+                                                               subitem: smallItem,
+                                                               count: 2)
 
-        
         // Nested groups
         
-        let nestedGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(widthOfScreen),
-                                                          heightDimension: .absolute(widthOfScreen * 2/3))
-        let firstNestedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: nestedGroupSize,
+        let nestedGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                     heightDimension: .absolute(widthOfScreen * 2/3))
+        let leftNestedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: nestedGroupSize,
                                                                   subitems: [largeItem, sideNestedGroup])
-        let secondNestedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: nestedGroupSize,
+        let rightNestedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: nestedGroupSize,
                                                                    subitems: [sideNestedGroup, largeItem])
-
-        // Common group
         
-        let commonGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(widthOfScreen),
-                                                     heightDimension: .absolute(2 * widthOfScreen))
+        // Common group
+        let commonGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                     heightDimension: .absolute(widthOfScreen * 2))
         let commonGroup = NSCollectionLayoutGroup.vertical(layoutSize: commonGroupSize,
-                                                           subitems: [topNestedGroup, firstNestedGroup, topNestedGroup, secondNestedGroup])
+                                                           subitems: [topNestedGroup, leftNestedGroup, topNestedGroup, rightNestedGroup])
         
         // Section
         
