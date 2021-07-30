@@ -49,57 +49,76 @@ final class LibraryViewController: UIViewController {
     }
 	
     private func setupCollectionView() {
+        
         let inset: CGFloat = 2.5
-        let widthInPercent = (UIScreen.main.bounds.size.width / 3) / UIScreen.main.bounds.size.width
-         
+        let widthOfScreen = UIScreen.main.bounds.width
+        
         // Large item
         
-        let largeItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(widthInPercent * 2),
-                                                   heightDimension: .fractionalWidth(widthInPercent * 2))
+        let largeItemSize = NSCollectionLayoutSize(widthDimension: .absolute(widthOfScreen * 2/3),
+                                                   heightDimension: .absolute(widthOfScreen * 2/3))
         let largeItem = NSCollectionLayoutItem(layoutSize: largeItemSize)
-        largeItem.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
+        largeItem.contentInsets = NSDirectionalEdgeInsets(top: inset,
+                                                          leading: inset,
+                                                          bottom: inset,
+                                                          trailing: inset)
         
         // Small item
         
-        let smallItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.5))
+        let smallItemSize = NSCollectionLayoutSize(widthDimension: .absolute(widthOfScreen * 1/3),
+                                                   heightDimension: .absolute(widthOfScreen * 1/3))
         let smallItem = NSCollectionLayoutItem(layoutSize: smallItemSize)
-        smallItem.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
+        smallItem.contentInsets = NSDirectionalEdgeInsets(top: inset,
+                                                          leading: inset,
+                                                          bottom: inset,
+                                                          trailing: inset)
         
-        // First line
+        // Top line
         
-        let rightNestedGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(widthInPercent),
-                                                          heightDimension: .fractionalHeight(1))
-        let rightNestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: rightNestedGroupSize, subitems: [smallItem])
+        let topNestedGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(widthOfScreen),
+                                                        heightDimension: .absolute(widthOfScreen * 1/3))
+        let topNestedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: topNestedGroupSize,
+                                                                subitem: smallItem,
+                                                                count: 3)
         
-        let firstGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                    heightDimension: .fractionalWidth(widthInPercent * 2))
-        let firstGroup = NSCollectionLayoutGroup.horizontal(layoutSize: firstGroupSize, subitems: [largeItem, rightNestedGroup])
+        // Side nested group
+        
+        let sideNestedGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(widthOfScreen * 1/3),
+                                                          heightDimension: .absolute(widthOfScreen * 2/3))
+        let sideNestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: sideNestedGroupSize,
+                                                               subitems: [smallItem])
 
-        // Second line
         
-        let leftNestedGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(widthInPercent),
-                                                         heightDimension: .fractionalHeight(1))
-        let leftNestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: leftNestedGroupSize, subitems: [smallItem])
+        // Nested groups
         
-        let secondGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                     heightDimension: .fractionalWidth(widthInPercent * 2))
-        let secondGroup = NSCollectionLayoutGroup.horizontal(layoutSize: secondGroupSize, subitems: [leftNestedGroup, largeItem])
-              
+        let nestedGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(widthOfScreen),
+                                                          heightDimension: .absolute(widthOfScreen * 2/3))
+        let firstNestedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: nestedGroupSize,
+                                                                  subitems: [largeItem, sideNestedGroup])
+        let secondNestedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: nestedGroupSize,
+                                                                   subitems: [sideNestedGroup, largeItem])
+
         // Common group
         
-        let commonGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                      heightDimension: .fractionalWidth(widthInPercent * 4))
-        let commonGroup = NSCollectionLayoutGroup.vertical(layoutSize: commonGroupSize, subitems: [firstGroup, secondGroup])
+        let commonGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(widthOfScreen),
+                                                     heightDimension: .absolute(2 * widthOfScreen))
+        let commonGroup = NSCollectionLayoutGroup.vertical(layoutSize: commonGroupSize,
+                                                           subitems: [topNestedGroup, firstNestedGroup, topNestedGroup, secondNestedGroup])
+        
+        // Section
         
         let section = NSCollectionLayoutSection(group: commonGroup)
-        section.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
+        section.contentInsets = NSDirectionalEdgeInsets(top: inset,
+                                                        leading: inset,
+                                                        bottom: inset,
+                                                        trailing: inset)
         
         let collectionCompositionalLayout = UICollectionViewCompositionalLayout(section: section)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionCompositionalLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(LibraryCollectionViewCell.self, forCellWithReuseIdentifier: reuseId)
-        collectionView.backgroundColor = .cyan
+        collectionView.backgroundColor = .white
         collectionView.delegate = self
         collectionView.dataSource = self
         
