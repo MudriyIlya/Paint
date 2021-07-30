@@ -14,17 +14,20 @@ final class LibraryCollectionViewCell: UICollectionViewCell {
 	private lazy var drawingName: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
-		label.numberOfLines = 2
-		label.font = UIFont.systemFont(ofSize: 8)
-		label.textColor = .black
-		label.textAlignment = .center
-		label.backgroundColor = .white
+        label.clipsToBounds = true
+        label.layer.cornerRadius = 1
+        label.backgroundColor = UIColor(white: 1, alpha: 0.37)
+        label.font = UIFont.systemFont(ofSize: 11, weight: .black)
+        label.textColor = .black
+        label.textAlignment = .left
 		return label
 	}()
 	
 	private lazy var drawing: UIImageView = {
 		let imageView = UIImageView()
-		imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.clipsToBounds = true
 		return imageView
 	}()
 	
@@ -33,7 +36,6 @@ final class LibraryCollectionViewCell: UICollectionViewCell {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		setupConstraints()
-        self.backgroundColor = UIColor(red: 0.027, green: 0.198, blue: 1, alpha: 0.1)
 	}
 	
 	required init?(coder: NSCoder) {
@@ -47,11 +49,10 @@ final class LibraryCollectionViewCell: UICollectionViewCell {
 		contentView.addSubview(drawingName)
 		
 		NSLayoutConstraint.activate([
-			drawingName.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0),
-			drawingName.topAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 20),
-			drawingName.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
-			drawingName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-			drawingName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5)
+            drawingName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
+            drawingName.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -5),
+            drawingName.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
+            drawingName.heightAnchor.constraint(equalToConstant: 20)
 		])
 		
 		NSLayoutConstraint.activate([
