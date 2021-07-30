@@ -104,12 +104,8 @@ final class DrawingViewController: DrawingCanvasViewController {
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
-		navigationController?.navigationBar.isHidden = true
+        super.viewWillAppear(animated)
 		changeCollectionViewEdgeInsets()
-	}
-
-	override var prefersStatusBarHidden: Bool {
-		return true
 	}
 	
 	// MARK: - Setup
