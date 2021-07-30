@@ -157,10 +157,7 @@ extension LibraryViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         let drawing = drawingCollection[indexPath.row]
         cell.configureCell(drawingModel: drawing)
-        if indexPath.row == 0 {
-            cell.backgroundColor = UIColor(red: 45/255, green: 155/255, blue: 240/255, alpha: 1)
-        }
-        
+		cell.getName() == "Новый рисунок" ? cell.setBackgroundColor(UIColor(red: 45/255, green: 155/255, blue: 240/255, alpha: 1)) : cell.setBackgroundColor(.white)
         return cell
     }
 	

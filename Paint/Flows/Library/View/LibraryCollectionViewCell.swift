@@ -63,6 +63,14 @@ final class LibraryCollectionViewCell: UICollectionViewCell {
 		])
 	}
 	
+	func getName() -> String {
+		return drawingName.text ?? ""
+	}
+	
+	func setBackgroundColor(_ color: UIColor) {
+		self.backgroundColor = color
+	}
+	
 	func configureCell(drawingModel: Drawing) {
 		drawingName.text = drawingModel.name
 		drawing.image = UIImage(data: drawingModel.imageData)
