@@ -106,14 +106,8 @@ final class DrawingViewController: DrawingCanvasViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		navigationController?.navigationBar.isHidden = true
 		changeCollectionViewEdgeInsets()
-		toolsCollectionView.contentOffset.x = -130
 	}
-	
-	override func viewDidAppear(_ animated: Bool) {
-		leftGradientView.setupGradientLayer()
-		rightGradientView.setupGradientLayer()
-	}
-	
+
 	override var prefersStatusBarHidden: Bool {
 		return true
 	}
@@ -190,9 +184,7 @@ final class DrawingViewController: DrawingCanvasViewController {
 	}
 	
 	private func changeCollectionViewEdgeInsets() {
-		let layoutMargins: CGFloat = self.toolsCollectionView.layoutMargins.left +
-			self.toolsCollectionView.layoutMargins.right
-		let sideInset = (self.view.frame.width / 2) - layoutMargins
+		let sideInset = (self.view.frame.width / 2) - 30
 		self.toolsCollectionView.contentInset = UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
 	}
 	
@@ -313,7 +305,6 @@ extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataS
 		guard scrollView == toolsCollectionView else { return }
 		let centerPoint = CGPoint(x: self.toolsCollectionView.frame.size.width / 2 + scrollView.contentOffset.x,
 								  y: self.toolsCollectionView.frame.size.height / 2 + scrollView.contentOffset.y)
-		print(toolsCollectionView.contentOffset)
 		if let indexPath = self.toolsCollectionView.indexPathForItem(at: centerPoint) {
 			centerCell = (self.toolsCollectionView.cellForItem(at: indexPath) as? ToolsCollectionViewCell )
 			centerCell?.transformToLarge()

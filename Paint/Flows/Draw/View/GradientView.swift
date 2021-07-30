@@ -38,7 +38,7 @@ final class GradientView: UIView {
 		}
 	}
 	
-	func setupGradientLayer() {
+	override func layoutSubviews() {
 		setupGradientDirection()
 		self.gradient.removeFromSuperlayer()
 		self.gradient.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
