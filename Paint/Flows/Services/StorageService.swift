@@ -29,8 +29,9 @@ struct StorageService {
             do {
                 let files = try FileManager.default.contentsOfDirectory(atPath: filePath.path)
                 var drawings = [Drawing]()
+                #warning("сделать кастомную проверку на расширение файла")
                 files
-                    .filter { $0.hasSuffix(".png") }
+                    .filter { $0.hasSuffix(".png") || $0.hasSuffix(".jpg") || $0.hasSuffix(".jpeg")}
                     .forEach { path in
                         guard let directoryPath = documentDirectoryPath() else { return }
                         let filePath = directoryPath.appendingPathComponent(path)
