@@ -11,13 +11,15 @@ final class LibraryCell: UICollectionViewCell {
     
     // MARK: Variables
     
+    static let identifier = "libraryCell"
+    
     private lazy var drawingName: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.clipsToBounds = true
         label.layer.cornerRadius = 1
-        label.backgroundColor = UIColor(white: 1, alpha: 0.37)
-        label.font = UIFont.systemFont(ofSize: 11, weight: .black)
+        label.backgroundColor = UIColor(white: 1, alpha: 0.57)
+        label.font = UIFont.systemFont(ofSize: 12, weight: .black)
         label.textColor = .black
         label.textAlignment = .left
         return label

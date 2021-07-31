@@ -34,6 +34,9 @@ final class DrawingViewController: DrawingCanvasViewController {
     private lazy var colorButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = colors.first
+        button.layer.borderColor = UIColor.white.cgColor
+        button.layer.borderWidth = 0.7
+        button.layer.cornerRadius = 15
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(openColors), for: .touchUpInside)
         return button
@@ -139,36 +142,36 @@ final class DrawingViewController: DrawingCanvasViewController {
         NSLayoutConstraint.activate([
             saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             saveButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            saveButton.widthAnchor.constraint(equalToConstant: 20),
+            saveButton.widthAnchor.constraint(equalToConstant: 30),
             saveButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor)
         ])
         
         NSLayoutConstraint.activate([
             undoButton.trailingAnchor.constraint(equalTo: saveButton.leadingAnchor, constant: -15),
             undoButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            undoButton.widthAnchor.constraint(equalToConstant: 20),
-            undoButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor)
+            undoButton.widthAnchor.constraint(equalToConstant: 30),
+            undoButton.heightAnchor.constraint(equalTo: undoButton.widthAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            exitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            exitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             exitButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            exitButton.widthAnchor.constraint(equalToConstant: 20),
-            exitButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor)
+            exitButton.widthAnchor.constraint(equalToConstant: 30),
+            exitButton.heightAnchor.constraint(equalTo: exitButton.widthAnchor)
         ])
         
         NSLayoutConstraint.activate([
             colorButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            colorButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
+            colorButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70),
             colorButton.widthAnchor.constraint(equalToConstant: 30),
             colorButton.heightAnchor.constraint(equalToConstant: 30)
         ])
         
         NSLayoutConstraint.activate([
             colorsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            colorsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
+            colorsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70),
             colorsTableView.widthAnchor.constraint(equalToConstant: 30),
-            colorsTableView.heightAnchor.constraint(equalToConstant: 7 * 30)
+            colorsTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
         NSLayoutConstraint.activate([
@@ -237,10 +240,10 @@ final class DrawingViewController: DrawingCanvasViewController {
     }
     
     private func showNameAlertController() {
-        let nameAlertController = UIAlertController(title: "Введите название", message: nil, preferredStyle: .alert)
+        let nameAlertController = UIAlertController(title: "Сохранить как:", message: nil, preferredStyle: .alert)
         
         nameAlertController.addTextField { [weak self] (textField: UITextField) in
-            textField.placeholder = "Название"
+            textField.placeholder = "IMG\(StorageService().count() + 1)"
             textField.text = self?.currentName ?? ""
         }
         
@@ -270,14 +273,11 @@ extension DrawingViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let color = colors[indexPath.row]
-        
         guard let cell = indexPath.row == 0 ?
                 tableView.dequeueReusableCell(withIdentifier: "firstColorCell") as? FirstColorsTableViewCell :
                 tableView.dequeueReusableCell(withIdentifier: "colorCell") as? ColorsTableViewCell
         else { return UITableViewCell() }
-        
-        cell.setupCellColor(color)
+        cell.setupCellColor(colors[indexPath.row])
         return cell
     }
     

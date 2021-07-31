@@ -25,6 +25,9 @@ final class ActionButton: UIButton {
 	private func setup() {
 		translatesAutoresizingMaskIntoConstraints = false
 		setImage(UIImage(named: imageName), for: .normal)
+        backgroundColor = .white
+        layer.cornerRadius = 15
+        layer.borderWidth = 0.7
 		addTarget(self, action: #selector(onButtonTap), for: .touchUpInside)
 	}
 	

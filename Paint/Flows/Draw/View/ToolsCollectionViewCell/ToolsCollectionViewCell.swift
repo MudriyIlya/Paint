@@ -1,7 +1,15 @@
+//
+//  ToolsCollectionViewFlowLayout.swift
+//  Paint
+//
+//  Created by Alan Podgornov on 26.07.2021.
+//
+
 import UIKit
 
 final class ToolsCollectionViewCell: UICollectionViewCell {
-	private lazy var toolImageView: UIImageView = {
+	
+    private lazy var toolImageView: UIImageView = {
 		let view = UIImageView()
         view.clipsToBounds = true
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -46,8 +54,6 @@ final class ToolsCollectionViewCell: UICollectionViewCell {
 			self.transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
 			self.layer.cornerRadius = self.frame.width / 2
 		}
-//		let generator = UIImpactFeedbackGenerator(style: .heavy)
-//		generator.impactOccurred()
 	}
 	
 	func transformToIdentity() {

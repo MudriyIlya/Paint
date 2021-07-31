@@ -8,7 +8,8 @@
 import UIKit
 
 final class ColorsTableViewCell: PrototypeColorsTableViewCell {
-	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+	
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		setup()
 		updateConstraints()
@@ -20,7 +21,8 @@ final class ColorsTableViewCell: PrototypeColorsTableViewCell {
 	
 	private func setup() {
 		contentView.addSubview(colorView)
-		contentView.backgroundColor = .white
+        layer.backgroundColor = UIColor.clear.cgColor
+        backgroundColor = .clear
 	}
 	
 	override func updateConstraints() {

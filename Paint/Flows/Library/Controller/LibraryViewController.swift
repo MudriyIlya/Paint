@@ -13,11 +13,10 @@ final class LibraryViewController: UIViewController {
     
     private var drawings = [Drawing]()
     
-    private let libraryCellIdentifier = "libraryCell"
     private lazy var libraryCollectionView: LibraryCollectionView = {
         let collectionView = LibraryCollectionView()
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(LibraryCell.self, forCellWithReuseIdentifier: libraryCellIdentifier)
+        collectionView.register(LibraryCell.self, forCellWithReuseIdentifier: LibraryCell.identifier)
         collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView
@@ -86,8 +85,9 @@ extension LibraryViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: libraryCellIdentifier,
-                                                            for: indexPath) as? LibraryCell else { return UICollectionViewCell() }
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LibraryCell.identifier,
+                                                            for: indexPath) as? LibraryCell else { return LibraryCell() }
         let drawing = drawings[indexPath.row]
         cell.configureCell(drawingModel: drawing)
         #warning("Выглядит костыльно, если с таким названием попадется, то покрасится в такой же цвет. Подумать как исправить")
