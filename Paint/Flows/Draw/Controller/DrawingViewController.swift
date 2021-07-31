@@ -220,15 +220,15 @@ final class DrawingViewController: DrawingCanvasViewController {
             self.spinner.showSpinner()
             self.saveDrawing(drawingName: drawingName, completion: self.backToLibrary)
             self.spinner.hideSpinner()
-		}
-		
-		let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
-		
-		nameAlertController.addAction(saveAndReturnAction)
-		nameAlertController.addAction(cancelAction)
-		
-		self.navigationController?.present(nameAlertController, animated: true, completion: nil)
-	}
+        }
+        
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        
+        nameAlertController.addAction(saveAndReturnAction)
+        nameAlertController.addAction(cancelAction)
+        
+        self.navigationController?.present(nameAlertController, animated: true, completion: nil)
+    }
 }
 
 // MARK: Extension TableView Delegate
@@ -253,9 +253,9 @@ extension DrawingViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		mainView.colorButton.backgroundColor = colors[indexPath.row]
         setLineColor(colors[indexPath.row])
-		openColors()
-		tableView.deselectRow(at: indexPath, animated: true)
-	}
+        openColors()
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }
 
 // MARK: Extension CollectionView Delegate
@@ -283,14 +283,14 @@ extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataS
 			centerCell = (self.toolsCollectionView.cellForItem(at: indexPath) as? ToolsCollectionViewCell )
 			centerCell?.transformToLarge()
             setPickedTool(tools[indexPath.row])
-		}
-		
-		if let cell = self.centerCell {
-			let offsetX = centerPoint.x - cell.center.x
-			if offsetX < -15 || offsetX > 15 {
-				cell.transformToIdentity()
-				self.centerCell = nil
-			}
-		}
-	}
+        }
+        
+        if let cell = self.centerCell {
+            let offsetX = centerPoint.x - cell.center.x
+            if offsetX < -15 || offsetX > 15 {
+                cell.transformToIdentity()
+                self.centerCell = nil
+            }
+        }
+    }
 }
