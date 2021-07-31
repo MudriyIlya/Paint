@@ -90,7 +90,7 @@ extension LibraryViewController: UICollectionViewDelegate, UICollectionViewDataS
                                                             for: indexPath) as? LibraryCell else { return LibraryCell() }
         let drawing = drawings[indexPath.row]
         cell.configureCell(drawingModel: drawing)
-        #warning("Выглядит костыльно, если с таким названием попадется, то покрасится в такой же цвет. Подумать как исправить")
+        #warning("Выглядит костыльно. Подумать как исправить")
         cell.getName() == "Новый рисунок" ? cell.setBackgroundColor(UIColor(red: 45/255, green: 155/255, blue: 240/255, alpha: 1)) : cell.setBackgroundColor(.white)
         return cell
     }
