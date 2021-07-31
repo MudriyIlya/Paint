@@ -13,14 +13,12 @@ final class SpinnerView: UIView {
     
     private lazy var spinner: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .large)
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     private lazy var backgroundView: UIView = {
         let view = UIView()
         view.isHidden = true
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor(white: 1, alpha: 0.7)
         return view
     }()
@@ -28,8 +26,8 @@ final class SpinnerView: UIView {
     // MARK: Initialization
     
     convenience init() {
-        self.init(frame: UIScreen.main.bounds)
-//        setupSpinner()
+        self.init(frame: Screen.bounds)
+        setupSpinner()
     }
     
     override init(frame: CGRect) {
@@ -45,6 +43,10 @@ final class SpinnerView: UIView {
     
     private func setupSpinner() {
         self.isUserInteractionEnabled = false
+        
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        
         self.addSubview(backgroundView)
         self.addSubview(spinner)
         
