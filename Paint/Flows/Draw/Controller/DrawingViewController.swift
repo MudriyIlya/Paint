@@ -208,7 +208,7 @@ final class DrawingViewController: DrawingCanvasViewController {
         self.toolsCollectionView.contentInset = UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
     }
     
-    // MARK: Button Actions
+    // MARK: - Button Actions
     private func setupActions() {
         undoButton.onButtonTapAction = { [weak self] _ in
             self?.undoButtonTapped()
@@ -265,7 +265,7 @@ final class DrawingViewController: DrawingCanvasViewController {
     }
 }
 
-// MARK: Extension TableView Delegate
+// MARK: - Extension TableView Delegate
 extension DrawingViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -289,7 +289,7 @@ extension DrawingViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-// MARK: Extension CollectionView Delegate
+// MARK: - Extension CollectionView Delegate
 extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tools.count
@@ -330,6 +330,44 @@ extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataS
                 cell.transformToIdentity()
                 self.centerCell = nil
             }
+        }
+    }
+}
+
+// MARK: - Hide Elements While Drawing
+extension DrawingViewController {
+    
+    private func hideButtons() {
+        exitButton.isHidden = true
+        undoButton.isHidden = true
+        saveButton.isHidden = true
+        colorButton.isHidden = true
+        toolsCollectionView.isHidden = true
+        leftGradientView.isHidden = true
+        rightGradientView.isHidden = true
+    }
+    
+    private func showButtons() {
+        exitButton.isHidden = false
+        undoButton.isHidden = false
+        saveButton.isHidden = false
+        colorButton.isHidden = false
+        toolsCollectionView.isHidden = false
+        leftGradientView.isHidden = false
+        rightGradientView.isHidden = false
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.hideButtons()
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
+            self?.showButtons()
         }
     }
 }
