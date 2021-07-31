@@ -192,7 +192,6 @@ final class DrawingViewController: DrawingCanvasViewController {
 	private func saveDrawing(drawingName: String, completion: ()->()) {
 		guard
 			let imageToSave = mainImageView.image,
-			let pngRepresentation = imageToSave.pngData()
 		else { return }
 		let drawingToSave = Drawing(name: drawingName, imageData: pngRepresentation)
 		StorageService().save(drawing: drawingToSave, completion: completion)
@@ -203,10 +202,8 @@ final class DrawingViewController: DrawingCanvasViewController {
 	}
 	
 	private func showNameAlertController() {
-		let nameAlertController = UIAlertController(title: "Введите название", message: nil, preferredStyle: .alert)
 		
 		nameAlertController.addTextField { [weak self] (textField: UITextField) in
-			textField.placeholder = "Название"
 			textField.text = self?.currentName ?? ""
 			textField.clearButtonMode = .whileEditing
 		}
@@ -217,6 +214,9 @@ final class DrawingViewController: DrawingCanvasViewController {
 				var drawingName = nameAlertController.textFields?.first?.text
 			else { return }
 			if drawingName == "" { drawingName = "IMG\(StorageService().count() + 1)" }
+			let pngRepresentation = imageToSave.pngData()
+        let nameAlertController = UIAlertController(title: "Сохранить как:", message: nil, preferredStyle: .alert)
+            textField.placeholder = "IMG\(StorageService().count() + 1)"
             self.spinner.showSpinner()
             self.saveDrawing(drawingName: drawingName, completion: self.backToLibrary)
             self.spinner.hideSpinner()

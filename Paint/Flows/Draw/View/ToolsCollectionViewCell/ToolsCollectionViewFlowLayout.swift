@@ -8,7 +8,8 @@
 import UIKit
 
 final class ToolsCollectionViewFlowLayout: UICollectionViewFlowLayout {
-	override func prepare() {
+	
+    override func prepare() {
 		itemSize = CGSize(width: 60, height: 60)
 		scrollDirection = .horizontal
 		minimumLineSpacing = 20
