@@ -131,15 +131,27 @@ final class LibraryViewController: UIViewController {
     
     // MARK: - Load Data From Storage
     
-    func loadDataFromStorage() {
+    private func loadDataFromStorage() {
         
         let image = UIImage(named: "addDrawing")
         guard let dataImage = image?.pngData() else { return }
         drawingCollection = [Drawing]()
         drawingCollection.append(Drawing(name: "Новый рисунок", imageData: dataImage))
-        StorageService().restoreImages().forEach { [weak self] in
-            self?.drawingCollection.append($0)
+        
+        StorageService().restoreImages { [weak self] restoreResult in
+            switch restoreResult {
+            case .success(let drawings):
+                drawings.forEach { [weak self] in
+                    self?.drawingCollection.append($0)
+                }
+                self?.updateUI()
+            case .failure(let error):
+                print("Library: loadDataFromStorage() error: ", error)
+            }
         }
+    }
+    
+    private func updateUI() {
         title = "You have \(drawingCollection.count - 1) drawings"
         collectionView?.reloadData()
     }

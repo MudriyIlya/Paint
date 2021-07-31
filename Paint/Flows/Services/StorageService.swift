@@ -10,13 +10,19 @@ import UIKit
 
 struct StorageService {
     
+    enum RestoreResult {
+        case success([Drawing])
+        case failure(Error)
+    }
+    
     // MARK: Save
     
-    public func save(drawing: Drawing) {
+    public func save(drawing: Drawing, completion: () -> ()) {
         guard let directoryPath = documentDirectoryPath() else { return }
         let filePath = directoryPath.appendingPathComponent(drawing.name + ".png")
         do {
             try drawing.imageData.write(to: filePath)
+            completion()
         } catch let error {
             print("Save to file system error: ", error)
         }
@@ -24,12 +30,11 @@ struct StorageService {
     
     // MARK: Restore
     
-    public func restoreImages() -> [Drawing] {
+    public func restoreImages(completion: (RestoreResult) -> ()) {
         if let filePath = documentDirectoryPath() {
             do {
                 let files = try FileManager.default.contentsOfDirectory(atPath: filePath.path)
                 var drawings = [Drawing]()
-                #warning("сделать кастомную проверку на расширение файла")
                 files
                     .filter { $0.hasSuffix(".png") || $0.hasSuffix(".jpg") || $0.hasSuffix(".jpeg")}
                     .forEach { path in
@@ -39,12 +44,12 @@ struct StorageService {
                         drawings.append(Drawing(name: filePath.deletingPathExtension().lastPathComponent,
                                                 imageData: fileData))
                     }
-                return drawings.sorted { $0.name > $1.name}
+                completion(.success(drawings.sorted { $0.name > $1.name }))
             } catch let error {
                 print("Reading error: ", error)
+                completion(.failure(error))
             }
         }
-        return [Drawing]()
     }
     
     // MARK: Helper path
