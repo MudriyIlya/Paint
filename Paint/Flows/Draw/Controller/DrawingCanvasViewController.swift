@@ -21,7 +21,7 @@ class DrawingCanvasViewController: UIViewController {
     
     private var openedImage: UIImage?
     private var historyImages = [UIImage]()
-    
+	
     private(set) lazy var mainImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.frame = self.view.frame
@@ -59,10 +59,12 @@ class DrawingCanvasViewController: UIViewController {
     
     public func openImage(with image: UIImage) {
         self.openedImage = image
+		historyImages.append(image)
     }
     
     public func undoButtonTapped() {
-        if historyImages.count >= 1 {
+		let openedImageCount = openedImage == nil ? 0 : 1
+        if historyImages.count > openedImageCount {
             historyImages.removeLast()
             mainImageView.image = historyImages.last
         }
