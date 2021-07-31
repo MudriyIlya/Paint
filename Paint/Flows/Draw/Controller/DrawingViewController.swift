@@ -80,11 +80,19 @@ final class DrawingViewController: DrawingCanvasViewController {
 		let view = GradientView(direction: .toLeft)
 		return view
 	}()
-	
+    
+    private lazy var spinner: SpinnerView = {
+        let view = SpinnerView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
 	// TODO: сделать colors
-	#warning("сделай выбор цвета")
+	#warning("Для цветов сделать отдельный класс, чтобы его тут просто инициализировать")
 	var colors: [UIColor] = [.black, .gray, .red, .orange, .yellow, .green, .cyan, .blue, .magenta, .purple, .brown]
 	
+    
+    // MARK: - Initialization
 	init(currentName: String?) {
 		super.init(nibName: nil, bundle: nil)
 		self.currentName = currentName
@@ -120,6 +128,7 @@ final class DrawingViewController: DrawingCanvasViewController {
 		view.addSubview(toolsCollectionView)
 		view.addSubview(leftGradientView)
 		view.addSubview(rightGradientView)
+        view.addSubview(spinner)
 	}
 	
 	private func setupConstraints() {
@@ -178,8 +187,15 @@ final class DrawingViewController: DrawingCanvasViewController {
 			rightGradientView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
 			rightGradientView.widthAnchor.constraint(equalToConstant: 100)
 		])
+        
+        NSLayoutConstraint.activate([
+            spinner.topAnchor.constraint(equalTo: view.topAnchor),
+            spinner.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            spinner.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            spinner.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
 	}
-	
+    
 	private func changeCollectionViewEdgeInsets() {
 		let sideInset = (self.view.frame.width / 2) - 30
 		self.toolsCollectionView.contentInset = UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
@@ -203,13 +219,13 @@ final class DrawingViewController: DrawingCanvasViewController {
 		colorButton.isHidden.toggle()
 	}
 	
-	@objc private func saveDrawing(drawingName: String) {
+    @objc private func saveDrawing(drawingName: String, completion: ()->()) {
 		guard
 			let imageToSave = mainImageView.image,
 			let pngRepresentation = imageToSave.pngData()
 		else { return }
 		let drawingToSave = Drawing(name: drawingName, imageData: pngRepresentation)
-		StorageService().save(drawing: drawingToSave)
+		StorageService().save(drawing: drawingToSave, completion: completion)
 	}
 	
 	private func backToLibrary() {
@@ -225,10 +241,12 @@ final class DrawingViewController: DrawingCanvasViewController {
 		}
 		
 		let saveAndReturnAction = UIAlertAction(title: "Сохранить", style: .default) { [weak self] _ in
+            guard let self = self else { return }
 			guard var drawingName = nameAlertController.textFields?.first?.text else { return }
 			if drawingName == "" { drawingName = "IMG\(StorageService().count() + 1)" }
-			self?.saveDrawing(drawingName: drawingName)
-			self?.backToLibrary()
+            self.spinner.showSpinner()
+            self.saveDrawing(drawingName: drawingName, completion: self.backToLibrary)
+            self.spinner.hideSpinner()
 		}
 		
 		let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
@@ -276,18 +294,12 @@ extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataS
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "toolsCell", for: indexPath) as? ToolsCollectionViewCell else { return UICollectionViewCell() }
 		var imageTool = UIImage()
-		#warning("переписать force unwrap'ы")
 		switch tools[indexPath.row] {
-		case .Pencil:
-			imageTool = UIImage(named: "pencil")!
-		case .Line:
-			imageTool = UIImage(named: "line")!
-		case .Rectangle:
-			imageTool = UIImage(named: "rectangle")!
-		case .Ellipse:
-			imageTool = UIImage(named: "ellipse")!
-		case .Triangle:
-			imageTool = UIImage(named: "triangle")!
+		case .Pencil: imageTool = UIImage(named: "pencil")!
+		case .Line: imageTool = UIImage(named: "line")!
+		case .Rectangle: imageTool = UIImage(named: "rectangle")!
+		case .Ellipse: imageTool = UIImage(named: "ellipse")!
+		case .Triangle: imageTool = UIImage(named: "triangle")!
 		}
 		cell.setImage(image: imageTool)
 		return cell
