@@ -8,7 +8,7 @@
 import UIKit
 
 final class LibraryCollectionView: UICollectionView {
-
+    
     // MARK: Properties
     
     private let inset: CGFloat = 1.0
@@ -52,16 +52,16 @@ final class LibraryCollectionView: UICollectionView {
         
         // Side nested group
         let sideNestedGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3),
-                                                          heightDimension: .fractionalHeight(1))
+                                                         heightDimension: .fractionalHeight(1))
         let sideNestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: sideNestedGroupSize, subitem: smallItem, count: 2)
-
+        
         // Nested groups
         let nestedGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                      heightDimension: .absolute(Screen.width * 2/3))
         let leftNestedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: nestedGroupSize,
-                                                                  subitems: [largeItem, sideNestedGroup])
+                                                                 subitems: [largeItem, sideNestedGroup])
         let rightNestedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: nestedGroupSize,
-                                                                   subitems: [sideNestedGroup, largeItem])
+                                                                  subitems: [sideNestedGroup, largeItem])
         
         // Common group
         let commonGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),

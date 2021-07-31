@@ -16,12 +16,13 @@ final class LibraryViewController: UIViewController {
     private let libraryCellIdentifier = "libraryCell"
     private lazy var libraryCollectionView: LibraryCollectionView = {
         let collectionView = LibraryCollectionView()
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(LibraryCell.self, forCellWithReuseIdentifier: libraryCellIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView
     }()
- 
+    
     // MARK: Lifecycle
     
     override func viewDidLoad() {
@@ -29,18 +30,18 @@ final class LibraryViewController: UIViewController {
         setupNavigationBar()
         setupLibrary()
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
         loadDataFromStorage()
     }
-	
+    
     // MARK: Setup Views
     
     private func setupLibrary() {
         self.view.addSubview(libraryCollectionView)
-        libraryCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             libraryCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
             libraryCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
@@ -90,17 +91,17 @@ extension LibraryViewController: UICollectionViewDelegate, UICollectionViewDataS
         let drawing = drawings[indexPath.row]
         cell.configureCell(drawingModel: drawing)
         #warning("Выглядит костыльно, если с таким названием попадется, то покрасится в такой же цвет. Подумать как исправить")
-		cell.getName() == "Новый рисунок" ? cell.setBackgroundColor(UIColor(red: 45/255, green: 155/255, blue: 240/255, alpha: 1)) : cell.setBackgroundColor(.white)
+        cell.getName() == "Новый рисунок" ? cell.setBackgroundColor(UIColor(red: 45/255, green: 155/255, blue: 240/255, alpha: 1)) : cell.setBackgroundColor(.white)
         return cell
     }
-	
-	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		if indexPath.row == 0 {
-			navigateToDrawingViewController()
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            navigateToDrawingViewController()
         } else {
-			let selectedDrawing = drawings[indexPath.row]
-			let drawingViewController = DrawingViewController(withDrawing: selectedDrawing)
+            let selectedDrawing = drawings[indexPath.row]
+            let drawingViewController = DrawingViewController(withDrawing: selectedDrawing)
             navigationController?.pushViewController(drawingViewController, animated: true)
         }
-	}
+    }
 }

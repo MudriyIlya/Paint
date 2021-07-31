@@ -34,7 +34,7 @@ class DrawingCanvasViewController: UIViewController {
     
     private func makeCanvas() -> UIImageView {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .center
         imageView.frame = Screen.bounds
         return imageView
     }
@@ -121,8 +121,20 @@ class DrawingCanvasViewController: UIViewController {
         
         // Merge tempImageView into mainImageView
         UIGraphicsBeginImageContext(mainImageView.frame.size)
-        mainImageView.image?.draw(in: view.bounds, blendMode: .normal, alpha: 1.0)
-        tempImageView.image?.draw(in: view.bounds, blendMode: .normal, alpha: opacity)
+        
+        if let image = mainImageView.image {
+            let imageWidth = image.size.width
+            let imageHeight = image.size.height
+            let origin: CGPoint = CGPoint(x: (Screen.width - imageWidth) / 2, y: (Screen.height - imageHeight) / 2)
+            mainImageView.image?.draw(in: CGRect(x: origin.x, y: origin.y, width: imageWidth, height: imageHeight),
+                                      blendMode: .normal,
+                                      alpha: 1.0)
+        } else {
+            mainImageView.image?.draw(in: Screen.bounds,
+                                      blendMode: .normal,
+                                      alpha: 1.0)
+        }
+        tempImageView.image?.draw(in: Screen.bounds, blendMode: .normal, alpha: opacity)
         mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
