@@ -1,5 +1,5 @@
 //
-//  LibraryCollectionViewCell.swift
+//  LibraryCell.swift
 //  Paint
 //
 //  Created by Сергей Флоря on 24.07.2021.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class LibraryCollectionViewCell: UICollectionViewCell {
+final class LibraryCell: UICollectionViewCell {
 	
 	// MARK: Variables
 	
@@ -63,6 +63,8 @@ final class LibraryCollectionViewCell: UICollectionViewCell {
 		])
 	}
 	
+    // MARK: Configuration
+    
 	func getName() -> String {
 		return drawingName.text ?? ""
 	}
