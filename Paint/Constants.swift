@@ -10,11 +10,7 @@ import UIKit
 
 // MARK: Screen size
 struct Screen {
+    static let bounds = UIScreen.main.bounds
     static let width = UIScreen.main.bounds.width
     static let height = UIScreen.main.bounds.height
 }
-
-// MARK: Library
-//struct Library {
-//    static let reuseId = "cell"
-//}

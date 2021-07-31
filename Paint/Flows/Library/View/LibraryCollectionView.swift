@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LibraryCollectionView: UICollectionView {
+final class LibraryCollectionView: UICollectionView {
 
     // MARK: Properties
     

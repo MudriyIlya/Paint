@@ -285,7 +285,7 @@ extension DrawingViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		colorButton.backgroundColor = colors[indexPath.row]
-		lineColor = colors[indexPath.row]
+        setLineColor(colors[indexPath.row])
 		openColors()
 		tableView.deselectRow(at: indexPath, animated: true)
 	}
@@ -323,7 +323,7 @@ extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataS
 		if let indexPath = self.toolsCollectionView.indexPathForItem(at: centerPoint) {
 			centerCell = (self.toolsCollectionView.cellForItem(at: indexPath) as? ToolsCollectionViewCell )
 			centerCell?.transformToLarge()
-			pickedTool = tools[indexPath.row]
+            setPickedTool(tools[indexPath.row])
 		}
 		
 		if let cell = self.centerCell {

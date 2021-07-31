@@ -10,45 +10,46 @@ import UIKit
 class DrawingCanvasViewController: UIViewController {
     
     // MARK: Variables
-    var lineColor = UIColor.black
-    var lineWidth: CGFloat = 10.0
-    var pickedTool: Tool = .Pencil
+    
     private(set) var tools: [Tool] = [.Pencil, .Line, .Rectangle, .Ellipse, .Triangle]
-    private var opacity: CGFloat = 1.0
-	private var lastPoint: CGPoint?
-	private var currentPoint: CGPoint?
+    private(set) var pickedTool: Tool = .Pencil
+    private(set) var lineColor = UIColor.black
+    private(set) var lineWidth: CGFloat = 10.0
+    private(set) var opacity: CGFloat = 1.0
+    
+    private var lastPoint: CGPoint?
+    private var currentPoint: CGPoint?
     private var swiped = false
     
     private var openedImage: UIImage?
     private var historyImages = [UIImage]()
-	
+    
     private(set) lazy var mainImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.frame = self.view.frame
-        return imageView
+        return makeCanvas()
     }()
     
     private lazy var tempImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.frame = self.view.frame
-        return imageView
+        return makeCanvas()
     }()
     
-    // MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        if let image = openedImage {
-            self.mainImageView.image = image
-        }
-        setupView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    private func makeCanvas() -> UIImageView {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.frame = Screen.bounds
+        return imageView
     }
     
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+        if let image = openedImage {
+            mainImageView.image = image
+        }
     }
     
     private func setupView() {
@@ -57,33 +58,53 @@ class DrawingCanvasViewController: UIViewController {
         self.view.addSubview(tempImageView)
     }
     
-    public func openImage(with image: UIImage) {
-        self.openedImage = image
-		historyImages.append(image)
-    }
-    
-    public func undoButtonTapped() {
-		let openedImageCount = openedImage == nil ? 0 : 1
+    func undoButtonTapped() {
+        let openedImageCount = openedImage == nil ? 0 : 1
         if historyImages.count > openedImageCount {
             historyImages.removeLast()
             mainImageView.image = historyImages.last
         }
     }
     
+    // MARK: - Configure tools
+    
+    func setPickedTool(_ tool: Tool) {
+        self.pickedTool = tool
+    }
+    
+    func setLineColor(_ color: UIColor) {
+        self.lineColor = color
+    }
+    
+    func setLineWidth(_ width: CGFloat) {
+        self.lineWidth = width
+    }
+    
+    func setOpacity(_ opacity: CGFloat) {
+        self.opacity = opacity
+    }
+    
+    func openImage(with image: UIImage) {
+        self.openedImage = image
+        historyImages.append(image)
+    }
+    
+    private func configureContextForDrawing(_ context: CGContext) {
+        context.setLineCap(.round)
+        context.setBlendMode(.normal)
+        context.setLineWidth(lineWidth)
+        context.setStrokeColor(lineColor.cgColor)
+    }
+    
     // MARK: - Touch
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else {
-            return
-        }
+        guard let touch = touches.first else { return }
         swiped = false
         lastPoint = touch.location(in: view)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else {
-            return
-        }
-        
+        guard let touch = touches.first else { return }
         swiped = true
         let currentPoint = touch.location(in: view)
         
@@ -112,141 +133,45 @@ class DrawingCanvasViewController: UIViewController {
     
     // MARK: - Drawing
     private func draw(from startPoint: CGPoint?, to endPoint: CGPoint?) {
-		guard let startPoint = startPoint else { return }
-		let end: CGPoint = endPoint ?? startPoint
-        switch pickedTool {
-        case .Pencil: drawLineByPencil(from: startPoint, to: end)
-        case .Line: drawLine(from: startPoint, to: end)
-        case .Rectangle: drawRectangle(from: startPoint, to: end)
-        case .Ellipse: drawEllipse(from: startPoint, to: end)
-        case .Triangle: drawTriangle(from: startPoint, to: end)
-        }
-    }
-    
-    // MARK: Pencil
-    func drawLineByPencil(from fromPoint: CGPoint, to toPoint: CGPoint) {
-        UIGraphicsBeginImageContext(view.frame.size)
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return
-        }
-        tempImageView.image?.draw(in: view.bounds)
+        guard let startPoint = startPoint else { return }
+        let end: CGPoint = endPoint ?? startPoint
         
-        context.move(to: fromPoint)
-        context.addLine(to: toPoint)
-        
-        context.setLineCap(.round)
-        context.setBlendMode(.normal)
-        context.setLineWidth(lineWidth)
-        context.setStrokeColor(lineColor.cgColor)
-        
-        context.strokePath()
-        
-        tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
-        tempImageView.alpha = opacity
-        UIGraphicsEndImageContext()
-    }
-    
-    // MARK: Line
-    func drawLine(from fromPoint: CGPoint, to toPoint: CGPoint) {
-        UIGraphicsBeginImageContext(view.frame.size)
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return
-        }
-		guard fromPoint != toPoint else { return }
-        tempImageView.image?.draw(in: view.bounds)
-        context.clear(UIScreen.main.bounds)
-        
-        context.move(to: fromPoint)
-        context.addLine(to: toPoint)
-        
-        context.setLineCap(.round)
-        context.setBlendMode(.normal)
-        context.setLineWidth(lineWidth)
-        context.setStrokeColor(lineColor.cgColor)
-        
-        context.strokePath()
-        
-        tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
-        tempImageView.alpha = opacity
-        UIGraphicsEndImageContext()
-    }
-    
-    // MARK: Ellipse
-    func drawEllipse(from fromPoint: CGPoint, to toPoint: CGPoint) {
-        UIGraphicsBeginImageContext(view.frame.size)
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return
-        }
-		guard fromPoint != toPoint else { return }
-        tempImageView.image?.draw(in: view.bounds)
-        context.clear(UIScreen.main.bounds)
-        
-        // Ellipse path
-        context.addEllipse(in: CGRect(x: fromPoint.x, y: fromPoint.y, width: toPoint.x - fromPoint.x, height: toPoint.y - fromPoint.y))
-        
-        context.setLineCap(.round)
-        context.setBlendMode(.normal)
-        context.setLineWidth(lineWidth)
-        context.setStrokeColor(lineColor.cgColor)
-        
-        context.strokePath()
-        
-        tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
-        tempImageView.alpha = opacity
-        UIGraphicsEndImageContext()
-    }
-    
-    // MARK: Rectangle
-    func drawRectangle(from fromPoint: CGPoint, to toPoint: CGPoint) {
-        UIGraphicsBeginImageContext(view.frame.size)
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return
-        }
-		guard fromPoint != toPoint else { return }
-        tempImageView.image?.draw(in: view.bounds)
-        context.clear(UIScreen.main.bounds)
-        
-        // Rectangle path
-        context.addRect(CGRect(x: fromPoint.x, y: fromPoint.y, width: toPoint.x - fromPoint.x, height: toPoint.y - fromPoint.y))
-        
-        context.setLineCap(.round)
-        context.setBlendMode(.normal)
-        context.setLineWidth(lineWidth)
-        context.setStrokeColor(lineColor.cgColor)
-        
-        context.strokePath()
-        
-        tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
-        tempImageView.alpha = opacity
-        UIGraphicsEndImageContext()
-    }
-    
-    // MARK: Triangle
-    func drawTriangle(from fromPoint: CGPoint, to toPoint: CGPoint) {
         UIGraphicsBeginImageContext(view.frame.size)
         guard let context = UIGraphicsGetCurrentContext() else { return }
-		guard fromPoint != toPoint else { return }
+        configureContextForDrawing(context)
         tempImageView.image?.draw(in: view.bounds)
-        context.clear(UIScreen.main.bounds)
         
-        // Triangle path
-        let path = UIBezierPath()
-        path.move(to: CGPoint(x: fromPoint.x, y: fromPoint.y))
-        path.addLine(to: CGPoint(x: toPoint.x, y: fromPoint.y))
-        path.addLine(to: CGPoint(x: fromPoint.x + ((toPoint.x - fromPoint.x)/2), y: toPoint.y))
-        path.close()
-
-        context.addPath(path.cgPath)
+        if pickedTool != Tool.Pencil {
+            guard startPoint != end else { return }
+            context.clear(UIScreen.main.bounds)
+        }
         
-        context.setLineCap(.round)
-        context.setBlendMode(.normal)
-        context.setLineWidth(lineWidth)
-        context.setStrokeColor(lineColor.cgColor)
+        switch pickedTool {
+        case .Pencil, .Line:
+            context.move(to: startPoint)
+            context.addLine(to: end)
+        case .Ellipse:
+            context.addEllipse(in: CGRect(x: startPoint.x, y: startPoint.y, width: end.x - startPoint.x, height: end.y - startPoint.y))
+        case .Rectangle:
+            context.addRect(CGRect(x: startPoint.x, y: startPoint.y, width: end.x - startPoint.x, height: end.y - startPoint.y))
+        case .Triangle:
+            context.addPath(triangleCGPath(startPoint: startPoint, endPoint: end))
+        }
         
         context.strokePath()
         
         tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
         tempImageView.alpha = opacity
         UIGraphicsEndImageContext()
+    }
+    
+    private func triangleCGPath(startPoint: CGPoint, endPoint: CGPoint) -> CGPath {
+        // Triangle path
+        let path = UIBezierPath()
+        path.move(to: CGPoint(x: startPoint.x, y: startPoint.y))
+        path.addLine(to: CGPoint(x: endPoint.x, y: startPoint.y))
+        path.addLine(to: CGPoint(x: startPoint.x + ((endPoint.x - startPoint.x)/2), y: endPoint.y))
+        path.close()
+        return path.cgPath
     }
 }
