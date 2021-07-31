@@ -10,66 +10,53 @@ import UIKit
 
 struct StorageService {
     
-    enum RestoreResult {
-        case success([Drawing])
-        case failure(Error)
+    // MARK: Helper
+    
+    private struct Documents {
+        static var path: URL {
+            let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+            return urls[0]
+        }
+        
+        static var files: [String] {
+            let filePath = Documents.path
+            do {
+                let files = try FileManager.default.contentsOfDirectory(atPath: filePath.path)
+                return files.filter { $0.hasSuffix(".png") || $0.hasSuffix(".jpg") || $0.hasSuffix(".jpeg") }
+            } catch let error {
+                print("Reading files error: ", error)
+                return [String]()
+            }
+        }
     }
     
     // MARK: Save
     
-    public func save(drawing: Drawing, completion: () -> ()) {
-        guard let directoryPath = documentDirectoryPath() else { return }
-        let filePath = directoryPath.appendingPathComponent(drawing.name + ".png")
+    func save(drawing: Drawing, completion: () -> ()) {
+        let filePath = Documents.path.appendingPathComponent(drawing.name + ".png")
         do {
             try drawing.imageData.write(to: filePath)
             completion()
-        } catch let error {
-            print("Save to file system error: ", error)
-        }
+        } catch let error { print("Saving file to \"Documents\" error: ", error) }
     }
     
     // MARK: Restore
     
-    public func restoreImages(completion: (RestoreResult) -> ()) {
-        if let filePath = documentDirectoryPath() {
-            do {
-                let files = try FileManager.default.contentsOfDirectory(atPath: filePath.path)
-                var drawings = [Drawing]()
-                files
-                    .filter { $0.hasSuffix(".png") || $0.hasSuffix(".jpg") || $0.hasSuffix(".jpeg")}
-                    .forEach { path in
-                        guard let directoryPath = documentDirectoryPath() else { return }
-                        let filePath = directoryPath.appendingPathComponent(path)
-                        guard let fileData = FileManager.default.contents(atPath: filePath.path) else { return }
-                        drawings.append(Drawing(name: filePath.deletingPathExtension().lastPathComponent,
-                                                imageData: fileData))
-                    }
-                completion(.success(drawings.sorted { $0.name > $1.name }))
-            } catch let error {
-                print("Reading error: ", error)
-                completion(.failure(error))
-            }
+    func restoreImages(completion: ([Drawing]) -> ()) {
+        var drawings = [Drawing]()
+        Documents.files.forEach { path in
+            let filePath = Documents.path.appendingPathComponent(path)
+            guard let fileData = FileManager.default.contents(atPath: filePath.path) else { return }
+            drawings.append(Drawing(name: filePath.deletingPathExtension().lastPathComponent, imageData: fileData))
         }
+        // TODO: Сортировку по дате изменения
+        #warning("Сделать сортировку по дате изменения")
+        completion(drawings.sorted { $0.name > $1.name })
     }
     
-    // MARK: Helper path
-    private func documentDirectoryPath() -> URL? {
-        let urls = FileManager.default.urls(for: .documentDirectory,
-                                            in: .userDomainMask)
-        guard let path = urls.first else { return nil }
-        return path
-    }
+    // MARK: Count
     
-    public func count() -> Int {
-        if let filePath = documentDirectoryPath() {
-            do {
-                let files = try FileManager.default.contentsOfDirectory(atPath: filePath.path)
-                return files.filter { $0.hasSuffix(".png") }.count
-            }
-            catch let error {
-                print("Reading path error: ", error)
-            }
-        }
-        return 0
+    func count() -> Int {
+        return Documents.files.count
     }
 }

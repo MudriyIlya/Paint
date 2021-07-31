@@ -17,19 +17,16 @@ final class DrawingViewController: DrawingCanvasViewController {
 	
 	private lazy var undoButton: ActionButton = {
 		let button = ActionButton(imageName: "refresh")
-		//button.backgroundColor = .blue
 		return button
 	}()
 	
 	private lazy var saveButton: ActionButton = {
 		let button = ActionButton(imageName: "check")
-		//button.backgroundColor = .red
 		return button
 	}()
 	
 	private lazy var exitButton: ActionButton = {
 		let button = ActionButton(imageName: "exit")
-		//button.backgroundColor = .red
 		return button
 	}()
 	
@@ -93,11 +90,20 @@ final class DrawingViewController: DrawingCanvasViewController {
 	
     
     // MARK: - Initialization
-	init(currentName: String?) {
-		super.init(nibName: nil, bundle: nil)
-		self.currentName = currentName
-	}
-	
+    
+    convenience init() {
+        self.init(withDrawing: nil)
+    }
+    
+    init(withDrawing drawing: Drawing?) {
+        super.init(nibName: nil, bundle: nil)
+        if let drawing = drawing {
+            self.currentName = drawing.name
+            guard let image = UIImage(data: drawing.imageData) else { return }
+            self.openImage(with: image)
+        }
+    }
+    
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
