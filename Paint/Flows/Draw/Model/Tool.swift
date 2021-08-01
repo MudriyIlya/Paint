@@ -6,7 +6,7 @@
 //
 
 enum Tool {
-    case Pencil
+	case Pencil
     case Line
     case Rectangle
     case Ellipse

@@ -8,11 +8,11 @@
 import UIKit
 
 final class ActionButton: UIButton {
-	private let imageName: String
+	private let imageName: String?
 	
-	var onButtonTapAction: ((UIButton) -> ())?
+	var onButtonTapAction: ((ActionButton) -> ())?
 	
-	init(imageName: String) {
+	init(imageName: String?) {
 		self.imageName = imageName
 		super.init(frame: .zero)
 		setup()
@@ -24,11 +24,12 @@ final class ActionButton: UIButton {
 	
 	private func setup() {
 		translatesAutoresizingMaskIntoConstraints = false
-		setImage(UIImage(named: imageName), for: .normal)
         backgroundColor = .white
         layer.cornerRadius = 15
         layer.borderWidth = 0.7
 		addTarget(self, action: #selector(onButtonTap), for: .touchUpInside)
+		guard let imageName = imageName else { return }
+		setImage(UIImage(named: imageName), for: .normal)
 	}
 	
 	@objc private func onButtonTap() {
@@ -39,5 +40,13 @@ final class ActionButton: UIButton {
 		let margin: CGFloat = 5
 		let area = self.bounds.insetBy(dx: -margin, dy: -margin)
 		return area.contains(point)
+	}
+	
+	func setBackgroundColor(_ color: UIColor?) {
+		backgroundColor = color
+	}
+	
+	func setAnotherHidden() {
+		isHidden.toggle()
 	}
 }
