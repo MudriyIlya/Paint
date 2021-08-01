@@ -36,6 +36,14 @@ final class LibraryViewController: UIViewController {
         loadDataFromStorage()
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if libraryCollectionView.contentOffset.y > 35 {
+            setupNavigationBar()
+        } else {
+            self.navigationItem.rightBarButtonItem = nil
+        }
+    }
+    
     // MARK: Setup Views
     
     private func setupLibrary() {
