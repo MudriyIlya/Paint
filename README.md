@@ -23,5 +23,5 @@
 
 
 
-[Paint](https://github.com/MudriyIlya/Paint/About/Paint.gif)
+[Paint](https://github.com/MudriyIlya/Paint/blob/main/About/Paint.gif)
 
