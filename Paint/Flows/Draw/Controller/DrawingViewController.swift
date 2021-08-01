@@ -158,7 +158,8 @@ final class DrawingViewController: DrawingCanvasViewController {
             spinner.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             spinner.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-	}
+
+  }
 	
     // MARK: Button Actions
 	private func setupActions() {
@@ -199,11 +200,13 @@ final class DrawingViewController: DrawingCanvasViewController {
 	
 	private func backToLibrary() {
 		self.navigationController?.popViewController(animated: true)
-	}
-	
+	}                                                    
+                                                                                      
 	private func showNameAlertController() {
+		let nameAlertController = UIAlertController(title: "Сохранить как:", message: nil, preferredStyle: .alert)
 		
 		nameAlertController.addTextField { [weak self] (textField: UITextField) in
+			textField.placeholder = "IMG\(StorageService().count() + 1)"
 			textField.text = self?.currentName ?? ""
 			textField.clearButtonMode = .whileEditing
 		}
