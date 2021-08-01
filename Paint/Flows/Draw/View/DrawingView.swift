@@ -26,6 +26,8 @@ final class DrawingView: UIView {
 	
 	private(set) lazy var colorButton: ActionButton = {
 		let button = ActionButton(imageName: nil)
+        button.layer.borderColor = UIColor.white.cgColor
+        button.layer.borderWidth = 0.7
 		return button
 	}()
 	
@@ -34,7 +36,6 @@ final class DrawingView: UIView {
 		translatesAutoresizingMaskIntoConstraints = false
 		addSubviews()
 		setupConstraints()
-		//backgroundColor = .red
 	}
 	
 	required init?(coder: NSCoder) {
@@ -50,24 +51,24 @@ final class DrawingView: UIView {
 	
 	private func setupConstraints() {
 		NSLayoutConstraint.activate([
-			saveButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-			saveButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20),
-			saveButton.widthAnchor.constraint(equalToConstant: 20),
+			saveButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+			saveButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 15),
+			saveButton.widthAnchor.constraint(equalToConstant: 30),
 			saveButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor)
 		])
 		
 		NSLayoutConstraint.activate([
 			undoButton.trailingAnchor.constraint(equalTo: saveButton.leadingAnchor, constant: -15),
-			undoButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20),
-			undoButton.widthAnchor.constraint(equalToConstant: 20),
-			undoButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor)
+			undoButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 15),
+			undoButton.widthAnchor.constraint(equalToConstant: 30),
+			undoButton.heightAnchor.constraint(equalTo: undoButton.widthAnchor)
 		])
 		
 		NSLayoutConstraint.activate([
-			exitButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-			exitButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20),
-			exitButton.widthAnchor.constraint(equalToConstant: 20),
-			exitButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor)
+			exitButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+			exitButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 15),
+			exitButton.widthAnchor.constraint(equalToConstant: 30),
+			exitButton.heightAnchor.constraint(equalTo: exitButton.widthAnchor)
 		])
 		
 		NSLayoutConstraint.activate([

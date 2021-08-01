@@ -79,10 +79,8 @@ final class DrawingViewController: DrawingCanvasViewController {
     
 	init(withDrawing drawing: Drawing?) {
 		super.init(nibName: nil, bundle: nil)
-		guard
-			let drawing = drawing,
-			let image = UIImage(data: drawing.imageData)
-		else { return }
+		guard let drawing = drawing,
+              let image = UIImage(data: drawing.imageData) else { return }
 		self.currentName = drawing.name
 		self.openImage(with: image)
 	}
@@ -121,7 +119,7 @@ final class DrawingViewController: DrawingCanvasViewController {
 			colorsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
 			colorsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
 			colorsTableView.widthAnchor.constraint(equalToConstant: 30),
-			colorsTableView.heightAnchor.constraint(equalToConstant: 7 * 30)
+            colorsTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
 		])
 		
 		NSLayoutConstraint.activate([
@@ -191,9 +189,8 @@ final class DrawingViewController: DrawingCanvasViewController {
 	}
 	
 	private func saveDrawing(drawingName: String, completion: ()->()) {
-		guard
-			let imageToSave = mainImageView.image,
-		else { return }
+		guard let imageToSave = mainImageView.image,
+              let pngRepresentation = imageToSave.pngData() else { return }
 		let drawingToSave = Drawing(name: drawingName, imageData: pngRepresentation)
 		StorageService().save(drawing: drawingToSave, completion: completion)
 	}
@@ -212,14 +209,9 @@ final class DrawingViewController: DrawingCanvasViewController {
 		}
 		
 		let saveAndReturnAction = UIAlertAction(title: "Сохранить", style: .default) { [weak self] _ in
-            guard
-				let self = self,
-				var drawingName = nameAlertController.textFields?.first?.text
-			else { return }
+            guard let self = self,
+                  var drawingName = nameAlertController.textFields?.first?.text else { return }
 			if drawingName == "" { drawingName = "IMG\(StorageService().count() + 1)" }
-			let pngRepresentation = imageToSave.pngData()
-        let nameAlertController = UIAlertController(title: "Сохранить как:", message: nil, preferredStyle: .alert)
-            textField.placeholder = "IMG\(StorageService().count() + 1)"
             self.spinner.showSpinner()
             self.saveDrawing(drawingName: drawingName, completion: self.backToLibrary)
             self.spinner.hideSpinner()
@@ -302,20 +294,14 @@ extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataS
 extension DrawingViewController {
     
     private func hideButtons() {
-        exitButton.isHidden = true
-        undoButton.isHidden = true
-        saveButton.isHidden = true
-        colorButton.isHidden = true
+        mainView.isHidden = true
         toolsCollectionView.isHidden = true
         leftGradientView.isHidden = true
         rightGradientView.isHidden = true
     }
     
     private func showButtons() {
-        exitButton.isHidden = false
-        undoButton.isHidden = false
-        saveButton.isHidden = false
-        colorButton.isHidden = false
+        mainView.isHidden = false
         toolsCollectionView.isHidden = false
         leftGradientView.isHidden = false
         rightGradientView.isHidden = false
