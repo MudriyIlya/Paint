@@ -34,7 +34,7 @@ class DrawingCanvasViewController: UIViewController {
     
     private func makeCanvas() -> UIImageView {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .center
         imageView.frame = Screen.bounds
         return imageView
     }
