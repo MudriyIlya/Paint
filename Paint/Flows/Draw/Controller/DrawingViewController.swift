@@ -158,7 +158,8 @@ final class DrawingViewController: DrawingCanvasViewController {
             spinner.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             spinner.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-	}
+
+  }
 	
     // MARK: Button Actions
 	private func setupActions() {
@@ -200,13 +201,13 @@ final class DrawingViewController: DrawingCanvasViewController {
 	
 	private func backToLibrary() {
 		self.navigationController?.popViewController(animated: true)
-	}
-	
+	}                                                    
+                                                                                      
 	private func showNameAlertController() {
-		let nameAlertController = UIAlertController(title: "Введите название", message: nil, preferredStyle: .alert)
+		let nameAlertController = UIAlertController(title: "Сохранить как:", message: nil, preferredStyle: .alert)
 		
 		nameAlertController.addTextField { [weak self] (textField: UITextField) in
-			textField.placeholder = "Название"
+			textField.placeholder = "IMG\(StorageService().count() + 1)"
 			textField.text = self?.currentName ?? ""
 			textField.clearButtonMode = .whileEditing
 		}
@@ -220,18 +221,18 @@ final class DrawingViewController: DrawingCanvasViewController {
             self.spinner.showSpinner()
             self.saveDrawing(drawingName: drawingName, completion: self.backToLibrary)
             self.spinner.hideSpinner()
-		}
-		
-		let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
-		
-		nameAlertController.addAction(saveAndReturnAction)
-		nameAlertController.addAction(cancelAction)
-		
-		self.navigationController?.present(nameAlertController, animated: true, completion: nil)
-	}
+        }
+        
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        
+        nameAlertController.addAction(saveAndReturnAction)
+        nameAlertController.addAction(cancelAction)
+        
+        self.navigationController?.present(nameAlertController, animated: true, completion: nil)
+    }
 }
 
-// MARK: Extension TableView Delegate
+// MARK: - Extension TableView Delegate
 extension DrawingViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -253,12 +254,12 @@ extension DrawingViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		mainView.colorButton.backgroundColor = colors[indexPath.row]
         setLineColor(colors[indexPath.row])
-		openColors()
-		tableView.deselectRow(at: indexPath, animated: true)
-	}
+        openColors()
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }
 
-// MARK: Extension CollectionView Delegate
+// MARK: - Extension CollectionView Delegate
 extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		return tools.count
@@ -283,14 +284,52 @@ extension DrawingViewController: UICollectionViewDelegate, UICollectionViewDataS
 			centerCell = (self.toolsCollectionView.cellForItem(at: indexPath) as? ToolsCollectionViewCell )
 			centerCell?.transformToLarge()
             setPickedTool(tools[indexPath.row])
-		}
-		
-		if let cell = self.centerCell {
-			let offsetX = centerPoint.x - cell.center.x
-			if offsetX < -15 || offsetX > 15 {
-				cell.transformToIdentity()
-				self.centerCell = nil
-			}
-		}
-	}
+        }
+        
+        if let cell = self.centerCell {
+            let offsetX = centerPoint.x - cell.center.x
+            if offsetX < -15 || offsetX > 15 {
+                cell.transformToIdentity()
+                self.centerCell = nil
+            }
+        }
+    }
+}
+
+// MARK: - Hide Elements While Drawing
+extension DrawingViewController {
+    
+    private func hideButtons() {
+        exitButton.isHidden = true
+        undoButton.isHidden = true
+        saveButton.isHidden = true
+        colorButton.isHidden = true
+        toolsCollectionView.isHidden = true
+        leftGradientView.isHidden = true
+        rightGradientView.isHidden = true
+    }
+    
+    private func showButtons() {
+        exitButton.isHidden = false
+        undoButton.isHidden = false
+        saveButton.isHidden = false
+        colorButton.isHidden = false
+        toolsCollectionView.isHidden = false
+        leftGradientView.isHidden = false
+        rightGradientView.isHidden = false
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.hideButtons()
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
+            self?.showButtons()
+        }
+    }
 }
