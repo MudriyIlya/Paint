@@ -23,5 +23,4 @@
 
 
 
-![Paint](https://github.com/MudriyIlya/Paint/blob/main/About/Paint.gif)
-
+<img src="https://github.com/MudriyIlya/Paint/blob/main/About/Paint.gif" width="720" />
